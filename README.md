@@ -85,6 +85,30 @@ of a homeowner with a software radio rather than a laboratory.
 Corrections are welcome, and the raw data is included so that anyone who wants to
 check the reasoning can do so.
 
+## Acknowledgements
+
+This work rests on other people's, and the parts that are not mine should be
+easy to find rather than buried.
+
+**vgabor99** corrected the battery decode. The original decoder placed battery
+voltage at byte 15, which was wrong; all four of the units it was derived from
+sat at nearly the same voltage, so a coincidence looked like a correlation. He
+located it at byte 20 by looking at a wider range of voltages, renamed the
+conductivity field, and wrote the fix himself as pull request 3668. He owns WH52
+units on 868 MHz in Europe, which makes him the only person I know of who could
+check any of this on different hardware.
+
+**Benjamin Larsson (merbanan)** and the rtl_433 contributors wrote and maintain
+the software that makes any of this possible, and reviewed the decoder that
+started it. **gdt** reviewed the battery correction.
+
+**Peter (pbkhrv)** maintains the rtl_433 Home Assistant add-on used for every
+radio capture here.
+
+The analysis, capture tooling and much of the reasoning were carried out with
+**Claude (Anthropic)**. Several of the mistakes in [errata.md](errata.md) are its
+own, and it found and corrected most of them.
+
 ## License
 
 Documentation and data are released under CC BY 4.0. The parser in `tools/` is
