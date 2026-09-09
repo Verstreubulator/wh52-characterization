@@ -1,0 +1,99 @@
+# Data
+
+The raw measurements behind every number in this repository. Both files were
+recorded on September 9, 2026, from Ecowitt WH52 sensors operating at 915 MHz in
+Coeur d'Alene, Idaho.
+
+Five sensors appear. Four are identified by the position they occupy in a back
+lawn, where they had been installed since July and from which they had been
+temporarily removed for construction work. The fifth, `desk_spare`, is an unused
+unit that sat indoors throughout and was never placed in soil or salt water; it
+appears only incidentally.
+
+Frames were captured with the flex decoder described in
+[../decoder.md](../decoder.md) and parsed with
+[../tools/wh52_parse.py](../tools/wh52_parse.py).
+
+| Sensor | Device identifier |
+|---|---|
+| back_lawn_ne | 005b45 |
+| back_lawn_nw | 0058ac |
+| back_lawn_se | 005995 |
+| back_lawn_sw | 005cb5 |
+| desk_spare | 0070f4 |
+
+## moisture-sweep-20260909.csv
+
+Readings taken while moving all four back lawn sensors through six conditions:
+open air, soil damp only with morning dew, ordinary garden soil not watered
+overnight, soil from a sprinkler-watered area, thoroughly saturated soil, and
+full submersion in water.
+
+At each level all four sensors were placed in the same material, pressed in
+firmly, and left at least three minutes. Readings were taken once the transmit
+interval returned to roughly 70 seconds, which indicates the sensor considers the
+reading stable.
+
+| Column | Meaning |
+|---|---|
+| level | The condition described above |
+| probe, device_id | Which sensor |
+| moisture_pct | As reported by the sensor |
+| m_raw | The raw measurement, 12 bits |
+| temp_C, ec_uS_cm | As reported by the sensor |
+| notes | Settling window, or why a value is missing |
+
+One value is absent. The sensor `back_lawn_se` produced no raw frame at the
+ordinary-soil level, because the radio saving the raw captures hears that
+particular unit poorly. Its percentage is recorded and its raw value is not.
+
+## conductivity-series-20260909.csv
+
+1,016 frames recorded between 07:15 and 10:29 while conductivity was raised from
+tap water at 319 µS/cm to the sensor's ceiling using ordinary table salt, and
+lowered again by dilution to fill gaps in the range.
+
+| Column | Meaning |
+|---|---|
+| time | Local time, Pacific |
+| probe, device_id | Which sensor |
+| moisture_pct, m_raw | As reported, and the raw measurement |
+| temp_C, ec_uS_cm | As reported |
+| byte11 | The conductivity range indicator, whole byte |
+| ec_raw | The 20-bit conductivity count |
+| byte8 | Carries the high bits of both the moisture and conductivity values |
+| logger | Which capture program produced the row, see below |
+
+### Two loggers, and a bias in the first
+
+The rows are not homogeneous, and the difference matters.
+
+**Logger 1**, marked `1 (filtered)`, ran from 07:15 to 08:41. It discarded any
+frame where byte 11 was not `0x16`, on the mistaken assumption that the byte was
+constant and could serve as a validity check. It also did not record `ec_raw` or
+`byte8`, so those columns are empty for its rows.
+
+**Every row from logger 1 therefore reports byte 11 as `0x16` by construction.**
+The absence of other values during that period is not evidence that none
+occurred. In fact some did, and were thrown away. This is described in
+[../errata.md](../errata.md).
+
+**Logger 2**, marked `2 (unfiltered)`, ran from 08:00 to 10:29 and validated
+frames on the checksum alone. Its rows carry all fields and no range filtering.
+Any analysis of byte 11 should use logger 2 rows only.
+
+### Caveats on the conductivity values
+
+Salt quantities were not measured, and there was no reference conductivity meter.
+The conductivity figures are the sensors' own readings. That is sufficient for the
+questions asked of this data, which concern the sensor's internal behavior, but it
+is not sufficient to calibrate the conversion itself.
+
+Temperature drifted between roughly 11 °C and 24 °C during the day as the sensors
+moved between outdoors and indoors. This turned out to affect where the range
+indicator switches, and is discussed in
+[../interpretation.md](../interpretation.md).
+
+One frame decodes to a temperature of 89.4 °C and a range indicator of 12. It
+passes the checksum and fails the CRC. It is left in deliberately, as an example
+of why both check bytes should be verified.
