@@ -62,8 +62,15 @@ water. Field capacity falls well below the top of the scale.
 **Conductivity measurement is auto-ranging.** The sensor moves through at least
 ten gain ranges as conductivity rises, and reports which one it is using. The
 indicator keeps changing after the conductivity reading itself has hit its
-ceiling, so it is not derived from the transmitted value. The conversion constant
-in common use has only ever been checked in the lowest range.
+ceiling, so it is not derived from the transmitted value, and it is independent
+of the arithmetic carry in how that value is packed. The conversion constant in
+common use has only ever been checked in the lowest range.
+
+**The 20-bit conductivity arithmetic is verified.** Raw captures taken either
+side of the boundary locate it to within 11 µS/cm of where the arithmetic says
+it should be. The captures cover every carry value the hardware can produce —
+a fourth is impossible, because the 10,000 µS/cm limit stops the count 5,947
+short of what it would need.
 
 **Conductivity is capped at 10,000 µS/cm.** This is a product limit rather than a
 limit of the data field, which has unused headroom.

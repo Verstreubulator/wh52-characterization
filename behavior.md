@@ -195,6 +195,61 @@ We would not extend these numbers to soil. The measurements were taken in water,
 and the published literature reports the opposite sign in soil. This is discussed
 in [interpretation.md](interpretation.md) and in [errata.md](errata.md).
 
+## Raw signal captures — verifying the conductivity arithmetic
+
+A second session on the afternoon of September 9 recorded raw IQ captures at controlled
+conductivities, specifically to test the parts of the conductivity decode that ordinary readings never
+reach. Conductivity was raised from tap water with table salt in four stages while all four back lawn
+sensors sat in the same cup. Thirty-three decodable frames were kept, listed with their decodes in
+`INVENTORY.csv` alongside the captures.
+
+The conductivity value is a 20-bit number assembled from three bytes, and the top four bits live in the
+same byte as part of the moisture measurement. Those top bits are zero below 2,560 µS/cm, which is above
+anything soil produces — so in normal use that part of the arithmetic is never exercised, and an error
+there would be invisible.
+
+| Range indicator | Carry bits | Frames | Conductivity |
+|---|---|---|---|
+| 1 | 0 | 8 | 5 µS/cm |
+| 4 | 0 | 7 | 2,191 – 2,333 |
+| 5 | **1** | 4 | 3,405 – 3,739 |
+| 7 | **1** | 8 | 4,940 – 5,112 |
+| 7 | **2** | 2 | 5,122 – 5,132 |
+| 13 | **3** | 4 | 10,002 – 10,008 |
+
+Moisture across the set spans 13 % to 98 %, and the raw moisture measurement 744 to 1,603.
+
+### The carry boundary, located to 11 µS/cm
+
+The first four bits of the carry change when the underlying count crosses 131,072, which is exactly
+5,120.0 µS/cm. Because the four sensors disagree with each other by about 11 %, they straddled that
+boundary while sitting in the same cup:
+
+| Sensor | count | conductivity | carry bits |
+|---|---|---|---|
+| `back_lawn_nw` | 130,854 | 5,111.5 µS/cm | 1 |
+| `back_lawn_se` | 131,131 | 5,122.3 | 2 |
+
+277 counts apart, taken seconds apart in one solution, **and the theoretical boundary falls between
+them**. The disagreement between units, which is a nuisance everywhere else, is useful here.
+
+### The range indicator and the carry are independent
+
+Range 7 contains frames with carry bits of both 1 and 2. The range did not change when the count crossed
+the 16-bit boundary.
+
+These two mechanisms are easy to conflate, since both change as conductivity rises. They are not related:
+the range indicator reflects a switch on the analogue side, and the carry is arithmetic in how the value
+is packed.
+
+### Carry bits of 4 cannot occur
+
+A carry value of 4 would require a count of 262,144, which is 10,240 µS/cm. The sensor clamps at 10,000,
+and the highest count we ever recorded is 256,197 — short by 5,947.
+
+**So 3 is the maximum the hardware can produce**, and captures covering 0, 1, 2 and 3 cover every value
+that exists rather than merely a good sample of them.
+
 ## Radio behavior
 
 The sensors transmit approximately every 70 seconds when readings are stable, and

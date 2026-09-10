@@ -109,6 +109,32 @@ If you are running rtl_433 as a Home Assistant add-on, the same specification ca
 be added to `rtl_433.conf.template` as a `decoder` line. It is additive and does
 not affect existing decoding.
 
+## Reproducing the conductivity conditions
+
+For anyone wanting to exercise the parts of the decode that soil never reaches, ordinary table salt in
+tap water is sufficient. No reference meter is needed, because the sensor's own reading is what you are
+testing against.
+
+Rough dosing, measured on about 350 ml: a shaker tap adds around **245 µS/cm**, and an eighth of a
+teaspoon around **3,300 µS/cm**. Conductivity stops being proportional to concentration above roughly
+10 g/l, so the higher steps overshoot those figures.
+
+Useful targets:
+
+| To reach | Aim for | Why |
+|---|---|---|
+| carry bits 1 | 2,600 – 5,100 µS/cm | first time the top bits are non-zero |
+| carry bits 2 | 5,150 – 7,600 | second carry |
+| carry bits 3, and the clamp | add a rounded quarter teaspoon | the ceiling, and the highest carry possible |
+
+Allow three minutes after stirring — for the salt to dissolve and for the temperature to settle, since
+dissolving shifts it. The sensor transmits every ten seconds while a reading is changing and every
+seventy once it has settled, so the return to the slow interval is a reliable stopping signal.
+
+Two practical warnings. **Rinse and dry the blades thoroughly afterwards**; a rinsed but still-damp
+sensor read 46–76 µS/cm as the film concentrated. And if you are pulling raw captures from a rolling
+buffer, **identify and fetch in one operation** — see [errata.md](errata.md).
+
 ## The proper fix
 
 This is a workaround. The correct solution is for the raw moisture value and the

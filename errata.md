@@ -102,3 +102,15 @@ Reflectometry instruments respond to the square root of permittivity, not to
 permittivity. On that basis the same measurements give 5 percent and 40 to 50
 percent, which are both reasonable. The error was ours, and the physically correct
 form was available in any textbook.
+
+## Capture files were lost between listing them and fetching them
+
+The radio node writes one raw capture per detected signal and keeps only about a hundred, so the pool
+turns over in well under an hour when the band is busy.
+
+Working through it in two steps — list the files containing the frames we wanted, then download those
+files — lost three of them. They had rotated out in the seconds between the two commands.
+
+Identifying and fetching has to be a single operation. Nothing important was lost, because the missing
+files duplicated conditions already held, but it could as easily have been the only capture of a
+condition that took an hour to set up.
