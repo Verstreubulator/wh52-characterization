@@ -14,6 +14,14 @@ Frames were captured with the flex decoder described in
 [../decoder.md](../decoder.md) and parsed with
 [../tools/wh52_parse.py](../tools/wh52_parse.py).
 
+Both files are decoded frames rather than radio recordings. The recordings are in
+[captures/](captures/), which has its own description; they were taken later the
+same day and cover conditions these two files do not, including a properly dry
+reference and the full span of the conductivity arithmetic.
+
+The captures in [captures/](captures/) additionally include three sensors that
+stayed in service throughout: `front_lawn_en`, `front_lawn_es` and `pear_tree`.
+
 | Sensor | Device identifier |
 |---|---|
 | back_lawn_ne | 005b45 |

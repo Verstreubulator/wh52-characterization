@@ -80,6 +80,16 @@ calibrating each one.
 We have not verified this against a gravimetric soil sample, which is the
 measurement that would settle it.
 
+There is also a practical difficulty with the air anchor. The same three sensors,
+measured in air before and after being rinsed, read 20 to 50 counts higher
+afterwards. That is up to five percentage points of moisture, which is larger than
+the difference between units the scheme exists to remove, and temperature accounts
+for only a fifth of it.
+
+So the air reading has to be taken on a sensor that is genuinely dry, and we cannot
+yet say how long after a wetting that is. This is described in
+[behavior.md](behavior.md).
+
 ## The range indicator appears to switch on uncompensated conductance
 
 The range indicator described in [behavior.md](behavior.md) does not divide

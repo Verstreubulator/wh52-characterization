@@ -40,6 +40,7 @@ said so in the text.
 | [errata.md](errata.md) | Conclusions we reached and later had to withdraw |
 | [sources.md](sources.md) | References |
 | [data/](data/) | The raw frames behind every number in this document |
+| [data/captures/](data/captures/) | Raw radio captures, for checking the decode itself |
 
 ## Summary of findings
 
@@ -70,7 +71,8 @@ common use has only ever been checked in the lowest range.
 side of the boundary locate it to within 11 µS/cm of where the arithmetic says
 it should be. The captures cover every carry value the hardware can produce —
 a fourth is impossible, because the 10,000 µS/cm limit stops the count 5,947
-short of what it would need.
+short of what it would need. The capture files themselves are included, so the
+decode can be checked without any of our sensors.
 
 **Conductivity is capped at 10,000 µS/cm.** This is a product limit rather than a
 limit of the data field, which has unused headroom.

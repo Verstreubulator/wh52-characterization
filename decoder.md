@@ -105,6 +105,10 @@ matches WH51 frames as well, which are shorter and can be ignored.
 The parser in [tools/wh52_parse.py](tools/wh52_parse.py) turns the resulting hex
 payload into the fields above. It reads from standard input or from an MQTT topic.
 
+If you would rather check the decode than reproduce the conditions, the raw radio
+recordings in [data/captures/](data/captures/) can be replayed straight into
+rtl_433 with `-r`, and every one of them is listed with its expected decode.
+
 If you are running rtl_433 as a Home Assistant add-on, the same specification can
 be added to `rtl_433.conf.template` as a `decoder` line. It is additive and does
 not affect existing decoding.
