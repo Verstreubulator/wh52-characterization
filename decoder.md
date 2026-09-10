@@ -84,6 +84,11 @@ Both check bytes should be verified. We recorded one frame in 522 that passed th
 sum check while decoding to a temperature of 89 °C and a range indicator that
 could not be valid. The CRC would have rejected it.
 
+A second bad frame is kept in [data/captures/](data/captures/) as a worked
+example. It fails both check bytes, and unlike the first one, nothing in its
+moisture, temperature or conductivity values looks wrong. Only the battery voltage
+gives it away, at 3,240 mV from an AA cell.
+
 **Do not use byte 11 as a validity check.** It was constant across every frame we
 had at the time, and using it as a filter seemed harmless. It is not: the moment
 the sensor changed range, that filter discarded exactly the frames that

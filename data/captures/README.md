@@ -43,6 +43,25 @@ the conductivity count take the values 0, 1, 2 and 3 here. A value of 4 would ne
 a count of 262,144, which is 10,240 µS/cm, and the sensor clamps at 10,000. The
 highest count in this set is 256,197. There is no fifth case to capture.
 
+## The file that is not in the inventory
+
+`g57185_915M_1000k.cu8` contains a WH52 transmission that fails both check bytes,
+so it has no inventory row. It is kept on purpose.
+
+```
+a20070f4028a0048200080166948937e7cccf7e6a213561e
+```
+
+The flex decoder recovers 194 bits rather than 192, and most of the frame looks
+perfectly ordinary: 0 percent moisture, raw 584, 25.0 °C, 5.0 µS/cm, range
+indicator 1. Every one of those is a plausible reading for the sensor it came
+from. The corruption is only visible in the tail, where byte 20 gives a battery
+voltage of 3,240 mV from a single AA cell.
+
+Neither check byte passes. The CRC is `0x56` against a computed `0xb9`, and the
+checksum `0x1e` against `0x82`. This is what a bad frame looks like when nothing
+about the numbers warns you, and it is the argument for verifying both.
+
 ## Columns in INVENTORY.csv
 
 | Column | Meaning |
