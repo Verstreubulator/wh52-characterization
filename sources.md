@@ -62,6 +62,16 @@ vgabor99. *Improve WH52 battery and conductivity reporting*. Pull request 3668,
 merged August 26, 2026. Corrected the battery voltage location to byte 20 and
 renamed the conductivity field.
 
+vgabor99. *Fix wh52 battery reporting 2*. `merbanan/rtl_433_tests` pull request
+519, opened August 23, 2026, still open at the time of writing. This is the
+paired change that updates the regression expectations for the rename above.
+Because it was never merged while the decoder change was, the WH52 regression
+currently fails: the tests still expect `conductivity` and `battery_V`. We
+confirmed this by building the unpatched decoder from master and running both test
+captures. It is not caused by anything in this repository, and it is noted here so
+that anyone comparing our figures against the committed expectations is not
+confused by the mismatch.
+
 pbkhrv. *rtl_433 Home Assistant add-ons*.
 https://github.com/pbkhrv/rtl_433-hass-addons
 The add-on used for all radio captures in this work.

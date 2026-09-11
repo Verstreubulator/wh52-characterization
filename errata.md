@@ -103,6 +103,29 @@ permittivity. On that basis the same measurements give 5 percent and 40 to 50
 percent, which are both reasonable. The error was ours, and the physically correct
 form was available in any textbook.
 
+## A dry-air reading was called an anchor before it was one
+
+Having captured four sensors reading 0 to 1 percent in air, we described the set
+as anchoring the bottom of the moisture scale. It does not.
+
+The sensors had been rinsed under hot water a few hours earlier. Compared against
+the same three units measured in air the previous night, before any of them had
+been wetted, they read 20 to 50 counts high once temperature was accounted for.
+That is up to five percentage points, on a measurement whose whole purpose was to
+be a fixed point.
+
+The mistake was treating a number that looked right, 0 percent in air, as
+evidence that the measurement was clean. The percentage clamps at zero, so it
+would have looked right across the entire range of the error.
+
+Reading the same units again a day later separated what was happening. Most of the
+offset was water and it evaporated. Roughly one percentage point did not, and
+appears to be a deposit left by the tap water and the salt. The owner suggested
+that before the data showed it.
+
+What survives is a rule rather than an anchor: a sensor that has been wet is not a
+dry-air reference for at least a day, and may hold about a point after that.
+
 ## Capture files were lost between listing them and fetching them
 
 The radio node writes one raw capture per detected signal and keeps only about a hundred, so the pool

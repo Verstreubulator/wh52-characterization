@@ -16,6 +16,15 @@ of electrodes (Ecowitt, n.d.).
 The sensor runs from a single AA cell. Our units report battery voltages between
 1.48 and 1.62 volts, consistent with an alkaline cell in normal service.
 
+The battery compartment is sealed twice, with a cap inside the outer cap. We
+looked because water ingress was a candidate explanation for sensors reading wet
+in air after a rinse. All four had been held under a running hot tap and all four
+were dry inside. Whatever is causing that offset is on the blades, not in the
+housing.
+
+We have not tested the seal in any deliberate way, and this says nothing about how
+it behaves after a few winters buried in wet soil.
+
 ## Why we looked outside Ecowitt
 
 Three attempts to find internal details produced nothing.
