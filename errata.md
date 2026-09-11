@@ -207,6 +207,27 @@ The common thread is that none of this was caught by writing carefully. It was
 caught by running every number in the document against the files shipped with it,
 which is a thing worth doing before publishing rather than after.
 
+## The sensors were said to hold a stable rank order, and they do not
+
+We reported that the four sensors kept the same conductivity rank order at every
+level tested, and used that stability as the main argument that the differences
+between units are physical rather than firmware.
+
+Taking every three-minute window in which all four sensors reported, there are
+fifteen different orderings across twenty-four windows, and each sensor reads both
+the highest and the lowest at some point. The apparent disagreement ranges from
+under 1 percent to over 20.
+
+The claim came from looking at one stirred solution and assuming the rest of the
+day looked the same. Most of the series was recorded while salt was being added
+and the solution was not uniform, so those windows measure the stirring as much as
+the sensors.
+
+The moisture side of the same argument survives, and for a better reason: four
+readings taken two months earlier fall on the same per-unit lines as the September
+data. That is evidence a conversion is fixed. Nothing equivalent exists for
+conductivity.
+
 ## Capture files were lost between listing them and fetching them
 
 The radio node writes one raw capture per detected signal and keeps only about a hundred, so the pool

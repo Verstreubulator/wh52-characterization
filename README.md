@@ -52,9 +52,11 @@ findings that seem most worth recording are these.
 **Each probe is individually calibrated, and the differences are substantial.**
 Four units measured across the same soil levels produced four different conversion
 curves, with slopes spanning 9.86 to 10.37 counts per percent and zero points
-spanning 607 to 640. In a single stirred solution the same four units
-reported conductivity values 11 percent apart. Readings from different units are
-not directly comparable without accounting for this.
+spanning 607 to 640. Readings from different units are not directly comparable without accounting for
+this, and four readings from two months earlier land on the same lines, so the
+conversion is a fixed property of each unit rather than a state it was in. In a
+single stirred solution the same four units reported conductivity values 11 percent
+apart, though we have only that one clean observation of it.
 
 **Neither end of the moisture scale is a soil condition.** Our data suggests 100
 percent corresponds to a dielectric permittivity of roughly 75, which is water, and

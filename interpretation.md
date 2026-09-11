@@ -178,17 +178,22 @@ not an oversight.
 
 ## Differences between units are probably physical
 
-Each sensor has its own moisture conversion and its own conductivity calibration,
-and the rank order among the four was stable all day.
+**For moisture, the difference is demonstrably fixed per unit.** Each sensor has
+its own conversion, and four readings taken two months earlier land on the same
+lines as the September data. Whatever causes it does not drift over a season.
 
 If the underlying measurement is a physical property of the surrounding material,
-as the permittivity result suggests, then differences between units are most
-likely differences in electrode geometry and cell constant rather than in
+as the permittivity result suggests, then a fixed per-unit difference is most
+likely a difference in electrode geometry and cell constant rather than in
 firmware. Small variations in blade spacing or plating would produce exactly this
-pattern.
+pattern. **We have not measured any physical dimension to check it.**
 
-**We think this is why the differences are stable and reproducible** rather than
-drifting, but we have not measured any physical dimension to check it.
+**For conductivity we cannot say the same.** An earlier version of this document
+argued from the four sensors holding a stable rank order all day. They do not: the
+order changes from window to window, and every sensor reads both highest and
+lowest at some point. The one stirred solution where they differ by 11 percent is a
+single observation, and the rest of the series was taken while salt was being added
+and the solution was not uniform. See [behavior.md](behavior.md).
 
 ## A conductivity correction for moisture is not warranted in our soil
 

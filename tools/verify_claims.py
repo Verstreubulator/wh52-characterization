@@ -209,6 +209,10 @@ for row in captures:
             else "low" if ec > 1000 else ("dry" if moist <= 1 else "soil")] += 1
 check("capture conditions: 27 dry, 22 soil, 4 at the ceiling",
       (counted["dry"], counted["soil"], counted["ceiling"]) == (27, 22, 4), str(dict(counted)))
+dry_ec = [float(r["ec_uS_cm"]) for r in captures if int(r["moisture_pct"]) <= 1]
+dry_ec += [float(r["ec_uS_cm"]) for r in sweep if r["level"] == "air"]
+check("dry air spans 4.6 to 5.4 microsiemens", (min(dry_ec), max(dry_ec)) == (4.6, 5.2),
+      f"{min(dry_ec)} to {max(dry_ec)} in captures and sweep")
 check("74 readings, 67 distinct payloads, 72 files",
       (len(captures), len({r["payload"] for r in captures}),
        len({r["file"] for r in captures})) == (74, 67, 72))
@@ -254,6 +258,9 @@ BANNED = [
      "not confirmable from the abstract we have"),
     ("water content is over-estimated in saline conditions",
      "not confirmable from the abstract we have"),
+    ("held the same rank order", "the order changes from window to window"),
+    ("rank order among the four was stable", "the order changes from window to window"),
+    ("4.7 to 5.4", "the published dry-air minimum is 4.6"),
     ("Flame-retardant epoxy resin",
      "that is the module's sealing compound; its probe is an alloy electrode"),
 ]

@@ -204,7 +204,7 @@ comparison, which says the same thing and can be checked.
 
 ### The reading has a floor near 5 µS/cm
 
-Sensors in dry air report 4.7 to 5.4 µS/cm, and never lower. Air has no
+Across every dry-air frame we have published, sensors report 4.6 to 5.4 µS/cm. Air has no
 conductivity to speak of, so this is the bottom of the scale rather than a
 measurement, and values near 5 should be read that way.
 
@@ -222,10 +222,7 @@ With enough salt added, all four sensors reported between 10,001.9 and 10,002.9
 These are sensors that disagree with each other by 11 percent at every other
 level. Agreement that close is a ceiling, not a measurement.
 
-### Units disagree with each other by about 11 percent
-
-In one well-stirred solution the four sensors reported the following, and held the
-same rank order at every level tested during the day.
+### In one stirred solution the four sensors disagreed by 11 percent
 
 | Sensor | Conductivity in one solution |
 |---|---|
@@ -233,6 +230,20 @@ same rank order at every level tested during the day.
 | ne | 4,061 to 4,161 |
 | se | 4,415 to 4,445 |
 | nw | 4,485 to 4,515 |
+
+**That is one solution at one moment, and it should not be generalised.** Taking
+every three-minute window in which all four sensors reported, the apparent
+disagreement ranges from under 1 percent to over 20, and the order changes
+constantly: each sensor is the lowest reader in some windows and the highest in
+others, across fifteen different orderings in twenty-four windows.
+
+Most of those windows are during salt addition, when the solution was not
+necessarily uniform, so they are not clean measurements of anything. That is the
+point. **The only window we can defend is the stirred one above**, and a single
+window cannot tell you whether the difference is a fixed property of each unit.
+
+An earlier version of this document said the rank order held all day. It does not,
+and the claim is withdrawn.
 
 ### The measurement auto-ranges
 
