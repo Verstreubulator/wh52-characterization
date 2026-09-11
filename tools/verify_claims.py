@@ -174,6 +174,46 @@ seq = [r["moisture_pct"] for r in percent
        if r["probe"] == "back_lawn_sw" and "07:15:21" <= r["time"] <= "07:15:51"]
 check("insertion reads 0, 5, 9 then 31", seq == ["0", "5", "9", "31"], str(seq))
 
+print("\nProse figures (behavior.md, decoder.md, data/captures/README.md)")
+sub = [int(r["m_raw"]) for r in sweep
+       if r["level"] == "submerged_water" and int(r["moisture_pct"]) == 100]
+check("submerged raw values are 1646 to 1669", (min(sub), max(sub)) == (1646, 1669))
+filtered = [r for r in series if int(r["byte11"], 16) >> 4 == 1 and r["logger"].startswith("1")]
+check("345 of the range 1 frames come from the filtered logger", len(filtered) == 345,
+      str(len(filtered)))
+soil = [float(r["ec_uS_cm"]) for r in sweep if r["level"] not in ("air", "submerged_water")]
+check("the sweep soil reached 137 microsiemens", round(max(soil)) == 137, f"{max(soil)}")
+check("one frame in 671 passed the sum check",
+      len([r for r in series if r["logger"].startswith("2")]) == 671)
+nw = [(int(r["m_raw"]), int(r["moisture_pct"])) for r in frames
+      if r["probe"].endswith("nw") and 2 <= int(r["moisture_pct"]) <= 70
+      and float(r["ec_uS_cm"]) < 300]
+nw += [(int(r["m_raw"]), int(r["moisture_pct"])) for r in sweep
+       if r["probe"].endswith("nw") and r["m_raw"] and 0 < int(r["moisture_pct"]) < 100]
+nw += [(int(r["m_raw"]), int(r["moisture_pct"])) for r in july if r["probe"].endswith("nw")]
+a, b = straight_line(sorted(set(nw)))
+check("the 1593 frame predicts 96.1 percent", abs((a + b * 1593) - 96.1) < 0.05,
+      f"{a + b * 1593:.2f}")
+for target, expected in ((280, (1689, 1673, 1669, 1595)), (2500, (1421, 1406, 1442, 1393))):
+    got = []
+    for unit in ("ne", "se", "sw", "nw"):
+        near = [(abs(float(r["ec_uS_cm"]) - target), int(r["m_raw"])) for r in series
+                if r["probe"].endswith(unit) and int(r["moisture_pct"]) >= 50]
+        got.append(min(near)[1])
+    check(f"conductivity table column at {target} microsiemens", tuple(got) == expected,
+          str(tuple(got)))
+counted = Counter()
+for row in captures:
+    ec, moist = float(row["ec_uS_cm"]), int(row["moisture_pct"])
+    counted["ceiling" if ec > 9000 else "high" if ec > 4000 else "mid" if ec > 3000
+            else "low" if ec > 1000 else ("dry" if moist <= 1 else "soil")] += 1
+check("capture conditions: 27 dry, 22 soil, 4 at the ceiling",
+      (counted["dry"], counted["soil"], counted["ceiling"]) == (27, 22, 4), str(dict(counted)))
+check("74 readings, 67 distinct payloads, 72 files",
+      (len(captures), len({r["payload"] for r in captures}),
+       len({r["file"] for r in captures})) == (74, 67, 72))
+
+
 print("\nByte map (decoder.md)")
 per_unit = defaultdict(lambda: defaultdict(set))
 for row in captures:

@@ -73,7 +73,7 @@ values ranged from 1646 to 1669, in each case at or above that unit's own fitted
 
 One frame captured a sensor mid-immersion reading 96 percent at a raw value of
 1593, which is an unclamped reading near the top of the range. Its fitted line
-predicts 96.2 percent. A second sensor produced a similar reading later the same
+predicts 96.1 percent. A second sensor produced a similar reading later the same
 morning at 1585, also reporting 96 percent.
 
 ### We could not measure a temperature effect
