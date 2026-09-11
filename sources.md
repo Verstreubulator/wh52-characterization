@@ -63,14 +63,14 @@ merged August 26, 2026. Corrected the battery voltage location to byte 20 and
 renamed the conductivity field.
 
 vgabor99. *Fix wh52 battery reporting 2*. `merbanan/rtl_433_tests` pull request
-519, opened August 23, 2026, still open at the time of writing. This is the
-paired change that updates the regression expectations for the rename above.
-Because it was never merged while the decoder change was, the WH52 regression
-currently fails: the tests still expect `conductivity` and `battery_V`. We
-confirmed this by building the unpatched decoder from master and running both test
-captures. It is not caused by anything in this repository, and it is noted here so
-that anyone comparing our figures against the committed expectations is not
-confused by the mismatch.
+519, opened August 23, 2026. The paired change updating the regression
+expectations for the rename above.
+
+It was not merged, and for about two weeks the WH52 regression failed: the decoder
+emitted the new field names while the tests still expected the old ones. The
+expectations were corrected on September 10, 2026 in commit `046e7e2` by Christian
+Zuckschwerdt, which fixed the suite without merging his pull request. That pull
+request is still open and now has nothing left to do.
 
 pbkhrv. *rtl_433 Home Assistant add-ons*.
 https://github.com/pbkhrv/rtl_433-hass-addons
