@@ -44,8 +44,9 @@ four different straight lines.
 
 The fit uses every unclamped frame in
 [data/moisture-frames-20260909.csv](data/moisture-frames-20260909.csv), the settled values in
-[data/moisture-sweep-20260909.csv](data/moisture-sweep-20260909.csv), and one point per sensor recovered
-from the July captures that were contributed to `rtl_433_tests`. Clamped readings, meaning anything at 0
+[data/moisture-sweep-20260909.csv](data/moisture-sweep-20260909.csv), and one point per sensor from
+[data/reference-frames-202607.csv](data/reference-frames-202607.csv), which is the
+decoded contents of the two July captures contributed to `rtl_433_tests`. Clamped readings, meaning anything at 0
 or 100 percent, are excluded because the raw value keeps moving there while the percentage does not.
 Those July points were taken two months earlier and land on the same lines, which is worth more than the
 residuals: the conversion is a stable property of each unit rather than a state it was in that morning.

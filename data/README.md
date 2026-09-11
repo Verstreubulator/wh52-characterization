@@ -55,6 +55,22 @@ One value is absent. The sensor `back_lawn_se` produced no raw frame at the
 ordinary-soil level, because the radio saving the raw captures hears that
 particular unit poorly. Its percentage is recorded and its raw value is not.
 
+## reference-frames-202607.csv
+
+Four frames from July 2026, two months before everything else here. They are the
+decoded contents of `gfile001` and `gfile002`, the two sample captures we
+contributed to `merbanan/rtl_433_tests` as pull request 508, and they are included
+because the conversion fit in [../behavior.md](../behavior.md) uses one point per
+sensor from them.
+
+They matter more than four points normally would. They were taken two months
+earlier, in a different season, by a different person doing a different job, and
+they land on the same lines as the September data. That is the only evidence we
+have that a sensor's conversion is a fixed property rather than something it
+happened to be doing that morning.
+
+The full payloads are here so nothing external is needed to check them.
+
 ## moisture-percent-20260909.csv
 
 70 readings from the four back lawn sensors between 07:03 and 07:28 on September 9,
