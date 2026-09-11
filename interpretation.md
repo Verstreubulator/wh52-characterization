@@ -117,8 +117,10 @@ from the data we have. See [errata.md](errata.md).
 ## The range indicator appears to switch on uncompensated conductance
 
 The range indicator described in [behavior.md](behavior.md) does not divide
-cleanly by reported conductivity. Ranges overlap, and in one case a single sensor
-reported range 6 at 4,870 µS/cm and range 7 at the lower value of 4,761.
+cleanly by reported conductivity. Ranges overlap, and in one case a single sensor,
+`back_lawn_ne`, reported range 6 at 4,869.7 µS/cm and range 7 at the lower value of
+4,760.8. Both frames are in
+[data/conductivity-series-20260909.csv](data/conductivity-series-20260909.csv).
 
 The two readings were taken at different temperatures, 21.3 °C and 23.5 °C.
 
@@ -189,8 +191,8 @@ drifting, but we have not measured any physical dimension to check it.
 
 ## A conductivity correction for moisture is not warranted in our soil
 
-Our measurements found no detectable effect below about 300 µS/cm, and our soil
-reads between 5 and 230.
+Our measurements found no detectable effect below about 300 µS/cm, and the soil in
+our sweep read between 5 and 137.
 
 We would not go further than that. The measurements were made in water, and the
 published literature reports the effect running the other way in soil, with

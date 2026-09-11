@@ -40,6 +40,7 @@ said so in the text.
 | [errata.md](errata.md) | Conclusions we reached and later had to withdraw |
 | [sources.md](sources.md) | References |
 | [data/](data/) | The raw frames behind every number in this document |
+| [tools/verify_claims.py](tools/verify_claims.py) | Recomputes every figure from that data |
 | [data/captures/](data/captures/) | Raw radio captures, for checking the decode itself |
 
 ## Summary of findings
@@ -90,6 +91,20 @@ bench, the packaging and the neighbouring probes.
 every dry-air frame gives slopes that disagree in sign between units, with scatter
 larger than any effect. An earlier version of this document gave a figure; it is
 withdrawn.
+
+## Checking it yourself
+
+Every figure in these documents should be recomputable from the CSV files in
+[data/](data/). There is a script that does it:
+
+```
+python tools/verify_claims.py
+```
+
+It reports one line per claim and exits non-zero if any fails. It exists because we
+published three numbers that no file supported, and reading the documents carefully
+had not caught any of them. Anything it does not cover is either a citation, or a
+judgement we have tried to label as one.
 
 ## A note on confidence
 

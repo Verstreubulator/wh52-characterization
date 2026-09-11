@@ -68,8 +68,8 @@ difference moves both together along that sensor's own line.
 ### The percentage saturates before the raw value does
 
 Submerged in water, all four sensors reported exactly 100 percent while their raw
-values ranged from 1646 to 1690, in each case above that unit's own fitted 100
-percent point. The raw value continues to rise after the percentage has stopped.
+values ranged from 1646 to 1669, in each case at or above that unit's own fitted
+100 percent point. The raw value continues to rise after the percentage has stopped.
 
 One frame captured a sensor mid-immersion reading 96 percent at a raw value of
 1593, which is an unclamped reading near the top of the range. Its fitted line
@@ -240,6 +240,9 @@ The sensor reports which of several gain ranges its conductivity front end is
 using. Raising conductivity from 5 µS/cm to the ceiling moved this indicator
 through ten distinct values.
 
+The one frame that fails the CRC is excluded from this table; it decodes to range 2 at 10 µS/cm and 89 °C,
+and is described in [data/](data/).
+
 | Range indicator | Conductivity observed | Frames | Sensors submerged |
 |---|---|---|---|
 | 1 | 4.7 to 360 µS/cm | 665 | all four |
@@ -256,7 +259,7 @@ through ten distinct values.
 Ranges 9 through 11 were not observed. Conductivity was raised in a single large
 step through that region and we did not return to fill it.
 
-Range 1 counts include 665 frames, but 260 of those come from a capture program
+Range 1 counts include 665 frames, but 345 of those come from a capture program
 that discarded frames where the indicator was not 1. See [data/](data/) for why
 that portion of the record is not evidence of anything.
 
@@ -283,20 +286,27 @@ as high as 4,990 µS/cm and range 7 as low as 4,700. This is discussed in
 With sensors fully submerged, so that water content could not change, raising
 conductivity lowered the reported moisture.
 
-| Sensor | Raw at 280 µS/cm | at 1,000 | at 1,400 | at 2,500 | Total change |
+For each sensor and each conductivity below, the frame taken is the submerged one whose conductivity is
+nearest that value. The conductivity actually reached is given underneath, because the salt was added in
+steps and none of these are exact.
+
+| Sensor | Raw at ~280 µS/cm | at ~1,000 | at ~1,400 | at ~2,500 | Change |
 |---|---|---|---|---|---|
-| ne | 1689 | 1582 | 1512 | 1421 | −268 |
-| se | 1649 | 1573 | 1473 | 1406 | −243 |
-| sw | 1671 | 1574 | 1527 | 1442 | −229 |
-| nw | 1595 | 1517 | 1477 | 1393 | −202 |
+| ne | 1689 | 1582 | 1492 | 1421 | −268 |
+| se | 1673 | 1573 | 1473 | 1406 | −267 |
+| sw | 1669 | 1574 | 1528 | 1442 | −227 |
+| nw | 1595 | 1476 | 1475 | 1393 | −202 |
+
+The conductivities those frames were actually at, in the same order: ne 299, 1007, 1443, 2524; se 279,
+1017, 1402, 2534; sw 278, 997, 1402, 2494; nw 299, 998, 1361, 2574.
 
 Below about 300 µS/cm the effect could not be detected. One sensor, which was the
 only one not saturated at the top of its scale in clean water, read 1609 at 4.8
 µS/cm and 1623 at 309 µS/cm. That is a small movement in the opposite direction
 and is within the noise of the measurement.
 
-Our own soil measures between 5 and 230 µS/cm, which places it entirely within the
-region where we could not detect the effect.
+The soil in our sweep measured between 5 and 137 µS/cm, which places it entirely
+within the region where we could not detect the effect.
 
 We would not extend these numbers to soil. The measurements were taken in water,
 and the published literature reports the opposite sign in soil. This is discussed
