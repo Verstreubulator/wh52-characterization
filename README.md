@@ -65,9 +65,10 @@ percent, not zero, and field capacity falls well below the top of the scale.
 
 **Conductivity measurement is auto-ranging.** The sensor moves through at least
 ten gain ranges as conductivity rises, and reports which one it is using. The
-indicator keeps changing after the conductivity reading itself has hit its
-ceiling, so it is not derived from the transmitted value, and it is independent
-of the arithmetic carry in how that value is packed. What the indicator is counting,
+indicator takes two different values while the conductivity reading sits at its
+ceiling, so it does not appear to be derived from the transmitted value, though
+that rests on a single frame we cannot check. It is independent of the arithmetic
+carry in how that value is packed. What the indicator is counting,
 and where its thresholds fall, we could not work out.
 
 **The 20-bit conductivity arithmetic is verified.** Raw captures taken either

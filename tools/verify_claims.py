@@ -56,7 +56,17 @@ def straight_line(points):
     return (sy - slope * sx) / n, slope
 
 
-series = load("conductivity-series-20260909.csv")
+series_rows = load("conductivity-series-20260909.csv")
+# Two loggers overlapped, so the file holds the same transmission more than once.
+# Everything below counts distinct transmissions.
+_seen = set()
+series = []
+for _r in series_rows:
+    _k = (_r["time"], _r["probe"], _r["m_raw"], _r["ec_uS_cm"],
+          _r["moisture_pct"], _r["temp_C"])
+    if _k not in _seen:
+        _seen.add(_k)
+        series.append(_r)
 frames = load("moisture-frames-20260909.csv")
 sweep = load("moisture-sweep-20260909.csv")
 percent = load("moisture-percent-20260909.csv")
@@ -127,8 +137,8 @@ for unit, (n, slope, zero, hundred, resid, eps0, eps100) in published.items():
           f"got n={len(points)} {1/b:.2f} {-a/b:.0f} {(grad*(-a/b)+offset)**2:.2f}")
 
 print("\nNo temperature coefficient is measurable (behavior.md)")
-for unit, (n, slope, resid) in {"ne": (48, 2.47, 30), "nw": (41, -2.14, 29),
-                                "se": (74, 0.71, 28), "sw": (50, 0.94, 26)}.items():
+for unit, (n, slope, resid) in {"ne": (34, 2.69, 31), "nw": (28, -1.86, 28),
+                                "se": (56, 0.05, 26), "sw": (31, 0.79, 26)}.items():
     rows = [r for r in series if r["probe"].endswith(unit)
             and int(r["moisture_pct"]) <= 1 and float(r["ec_uS_cm"]) < 20]
     temps = [float(r["temp_C"]) for r in rows]
@@ -140,7 +150,7 @@ for unit, (n, slope, resid) in {"ne": (48, 2.47, 30), "nw": (41, -2.14, 29),
           f"got n={len(rows)} {b:+.2f} {worst:.0f}")
 
 print("\nConductivity (behavior.md)")
-ranges = {1: (4.7, 359.9, 665), 2: (906.6, 1078.6, 32), 3: (1330.9, 2027.6, 44),
+ranges = {1: (4.7, 359.9, 451), 2: (906.6, 1078.6, 28), 3: (1330.9, 2027.6, 44),
           4: (2272.5, 2978.5, 32), 5: (3101.0, 3576.0, 33), 6: (4030.6, 4989.6, 84),
           7: (4700.2, 5356.9, 54), 8: (6040.4, 6040.4, 1),
           12: (10006.8, 10006.8, 1), 13: (10000.9, 10003.8, 69)}
@@ -179,12 +189,13 @@ sub = [int(r["m_raw"]) for r in sweep
        if r["level"] == "submerged_water" and int(r["moisture_pct"]) == 100]
 check("submerged raw values are 1646 to 1669", (min(sub), max(sub)) == (1646, 1669))
 filtered = [r for r in series if int(r["byte11"], 16) >> 4 == 1 and r["logger"].startswith("1")]
-check("345 of the range 1 frames come from the filtered logger", len(filtered) == 345,
-      str(len(filtered)))
+check("334 of the range 1 transmissions come from the filtered logger",
+      len(filtered) == 334, str(len(filtered)))
 soil = [float(r["ec_uS_cm"]) for r in sweep if r["level"] not in ("air", "submerged_water")]
 check("the sweep soil reached 137 microsiemens", round(max(soil)) == 137, f"{max(soil)}")
-check("one frame in 671 passed the sum check",
-      len([r for r in series if r["logger"].startswith("2")]) == 671)
+check("the series holds 1,016 rows and 798 distinct transmissions",
+      (len(series_rows), len(series)) == (1016, 798),
+      f"{len(series_rows)} rows, {len(series)} distinct")
 nw = [(int(r["m_raw"]), int(r["moisture_pct"])) for r in frames
       if r["probe"].endswith("nw") and 2 <= int(r["moisture_pct"]) <= 70
       and float(r["ec_uS_cm"]) < 300]
@@ -207,22 +218,24 @@ for row in captures:
     ec, moist = float(row["ec_uS_cm"]), int(row["moisture_pct"])
     counted["ceiling" if ec > 9000 else "high" if ec > 4000 else "mid" if ec > 3000
             else "low" if ec > 1000 else ("dry" if moist <= 1 else "soil")] += 1
-check("capture conditions: 27 dry, 22 soil, 4 at the ceiling",
-      (counted["dry"], counted["soil"], counted["ceiling"]) == (27, 22, 4), str(dict(counted)))
+check("capture conditions: 29 dry, 23 soil, 4 at the ceiling",
+      (counted["dry"], counted["soil"], counted["ceiling"]) == (29, 23, 4), str(dict(counted)))
 dry_ec = [float(r["ec_uS_cm"]) for r in captures if int(r["moisture_pct"]) <= 1]
 dry_ec += [float(r["ec_uS_cm"]) for r in sweep if r["level"] == "air"]
 check("air frames span 4.6 to 5.2 microsiemens", (min(dry_ec), max(dry_ec)) == (4.6, 5.2),
       f"{len(dry_ec)} frames")
 outs = [r for r in series if int(r["m_raw"]) < 700 and r["time"] >= "08:00:00"]
 floor = [r for r in outs if float(r["ec_uS_cm"]) < 6]
-check("out of solution, 255 of 307 frames sit at the floor",
-      (len(floor), len(outs)) == (255, 307), f"{len(floor)} of {len(outs)}")
+check("out of solution, 164 of 199 transmissions sit at the floor",
+      (len(floor), len(outs)) == (164, 199), f"{len(floor)} of {len(outs)}")
 above = [float(r["ec_uS_cm"]) for r in outs if float(r["ec_uS_cm"]) >= 6]
 check("the remainder read 15 to 2,272 microsiemens",
       (min(above), max(above)) == (15.4, 2272.5), f"{min(above)} to {max(above)}")
-check("74 readings, 67 distinct payloads, 72 files",
+check("77 readings, 69 distinct payloads, all 74 files",
       (len(captures), len({r["payload"] for r in captures}),
-       len({r["file"] for r in captures})) == (74, 67, 72))
+       len({r["file"] for r in captures})) == (77, 69, 74),
+      f"{len(captures)}, {len({r['payload'] for r in captures})}, "
+      f"{len({r['file'] for r in captures})}")
 
 
 print("\nByte map (decoder.md)")
@@ -256,7 +269,15 @@ BANNED = [
     ("read 7 percent", "no retained file contains that reading"),
     ("3.3 to 4.1", "the zero point is permittivity 1.7 to 1.9"),
     ("between 5 and 230", "the sweep soil reached 137"),
-    ("but 260 of those", "345 frames came from the filtered logger"),
+    ("but 345 of those", "334 distinct transmissions came from the filtered logger"),
+    ("1,016 valid frames", "1,016 rows but 798 distinct transmissions"),
+    ("moved from 12 to 13", "the indicator fell: the single 12 comes after every 13"),
+    ("observed at 12 and then at 13", "the indicator fell, it did not rise"),
+    ("1.024 Msps", "the captures are 1.000 Msps"),
+    ("Skierucha & Wilczek, 2012", "PMC3472864 is Wilczek et al. 2012"),
+    ("Kizito, F., et al.", "PMC11014125 is Fragkos et al. 2024"),
+    ("published literature reports the opposite sign", "we could not confirm a direction"),
+    ("Every raw capture that contains a decodable frame", "38 of 77 readings appear once"),
     ("only ever been checked in the lowest range",
      "the July calibration spanned 340 to 7,430 uS/cm, which is ranges 1 to 8"),
     ("only ever validated in ordinary soil",

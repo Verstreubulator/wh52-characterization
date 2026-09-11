@@ -73,7 +73,7 @@ instead, which is the opposite sign. We had measured one case and made a
 statement about the other.
 
 A later version of this entry said the published literature reports the opposite
-direction in soil, citing Skierucha and Wilczek. We have only read that paper's
+direction in soil, citing a paper we had also mis-cited. We have only read that paper's
 abstract and could not confirm it, so that attribution has been removed too. The
 withdrawal stands on its own: we measured in water and spoke about soil.
 
@@ -227,6 +227,58 @@ The moisture side of the same argument survives, and for a better reason: four
 readings taken two months earlier fall on the same per-unit lines as the September
 data. That is evidence a conversion is fixed. Nothing equivalent exists for
 conductivity.
+
+## A frame we published as corrupt was our own decoder's mistake
+
+We presented one capture as a worked example of a bad frame: moisture, temperature
+and conductivity all plausible, given away only by a battery voltage of 3,240 mV
+from an AA cell, with neither check byte passing.
+
+An independent demodulation of the same capture recovers a payload that agrees byte
+for byte until the tail, passes both check bytes, and gives 1,620 mV. A wrong
+payload satisfying an eight-bit CRC and an eight-bit sum by chance is about one in
+65,536. The transmission was fine; rtl_433's flex decoder slipped bits near the end
+of a weak burst.
+
+Two further real frames were missing from the inventory for the same reason. The
+inventory is now built from candidates pooled across two independent demodulators,
+with every candidate validated on both check bytes, so a fault in either tool can
+only cause a miss and never a false entry. On that basis every row we had already
+published was confirmed: the defect was completeness, not correctness.
+
+The lesson the example was making survives, which is why it was worth keeping in
+some form. Verify both check bytes. Our own mis-decode produced numbers that all
+looked reasonable except one.
+
+## Counts were inflated by two loggers hearing the same transmissions
+
+Frame counts throughout this repository were row counts. Two loggers ran
+concurrently for part of the conductivity work and heard many of the same
+transmissions, so 1,016 rows contain 218 duplicates and 798 distinct transmissions.
+Range 1 was reported as 665 frames and is 451. The temperature fit was reported as
+48, 41, 74 and 50 frames and is 34, 28, 56 and 31.
+
+No conclusion changes. The conductivity ranges and the fitted slopes move very
+little, and the temperature result is if anything cleaner: one unit's slope falls
+from +0.71 to +0.05 counts per degree, which makes the disagreement between units
+starker rather than softer. What was wrong was the implied weight of evidence,
+overstated by up to 40 percent.
+
+## Two citations named the wrong people
+
+We cited a paper as *Skierucha & Wilczek (2012), A FDR sensor for measuring complex
+soil dielectric permittivity in the 10–500 MHz frequency range, Sensors 12(8),
+PMC3472864*. That is two papers merged. The title belongs to Skierucha and Wilczek,
+Sensors **2010**, PMC3274183. The volume, pages and identifier belong to *Wilczek,
+Szypłowska, Skierucha, Cieśla, Pichler and Janik (2012)*, a six-author paper on soil
+pore water salinity. We had credited six authors' work to two of them under another
+paper's title.
+
+Separately, we attributed a 2024 paper on the TEROS 12 sensor to "Kizito et al.".
+Its authors are Fragkos, Loukatos, Kargas and Arvanitis.
+
+Both were caught by querying the identifiers we had ourselves published. Neither
+would have been caught by reading, and both name real people.
 
 ## Capture files were lost between listing them and fetching them
 

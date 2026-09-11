@@ -34,9 +34,17 @@ Research, 16*(3), 574–582.
 The standard conversion from dielectric permittivity to volumetric water content,
 used in [interpretation.md](interpretation.md). Fitted for mineral soils.
 
-Skierucha, W., & Wilczek, A. (2012). A FDR sensor for measuring complex soil
-dielectric permittivity in the 10–500 MHz frequency range. *Sensors, 12*(8),
-10890–10905. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3472864/
+Wilczek, A., Szypłowska, A., Skierucha, W., Cieśla, J., Pichler, V., & Janik, G.
+(2012). Determination of soil pore water salinity using an FDR sensor working at
+various frequencies up to 500 MHz. *Sensors, 12*(8), 10890–10905.
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3472864/
+
+⚠ Earlier versions of this file cited the above as "Skierucha & Wilczek (2012)"
+under the title *A FDR sensor for measuring complex soil dielectric permittivity in
+the 10–500 MHz frequency range*. That is a different paper: Skierucha & Wilczek,
+*Sensors* **2010**, 10(4), 3314–3329, PMC3274183. We had merged a 2010 title with a
+2012 identifier and credited a six-author paper to two of its authors. Corrected
+2026-09-11.
 Cited for the approach of determining bulk electrical conductivity from the
 imaginary part of the complex permittivity, which its abstract describes as done
 "without disregarding the dielectric losses". **We have only read the abstract.**
@@ -49,9 +57,12 @@ how we read moisture. **No claim in this repository rests on any of them**, and 
 have not gone back to verify their contents against anything we wrote. They are
 listed so that someone following the same question has the same starting points.
 
-Kizito, F., et al. *Response of the TEROS 12 soil moisture sensor under different
-soils and variable electrical conductivity*.
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11014125/
+Fragkos, A., Loukatos, D., Kargas, G., & Arvanitis, K. G. (2024). Response of the
+TEROS 12 soil moisture sensor under different soils and variable electrical
+conductivity. *Sensors*. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11014125/
+⚠ Earlier versions attributed this paper to Kizito and colleagues, who are not
+authors of it; that appears to be a confusion with a different, older paper on a
+different sensor. Corrected 2026-09-11.
 
 *Advances in calibration methods for FDR-based capacitive soil moisture sensors*.
 https://pmc.ncbi.nlm.nih.gov/articles/PMC13259125/

@@ -152,12 +152,18 @@ temperature is accounted for.
 
 At the 10,000 µS/cm ceiling all four sensors report the same clamped value. Over
 one five-minute window they agree to 0.01 percent, and across the whole clamped
-period to 0.06 percent. The range indicator nonetheless moved from 12 to 13 while
-that value stayed fixed.
+period to 0.06 percent. The range indicator nonetheless shows 13 on 69 frames and
+12 on one, while that value stayed fixed.
 
 **This means the indicator cannot be computed from the conductivity the sensor
-transmits.** It must reflect an internal measurement that continues to rise after
-the transmitted figure has been capped.
+transmits.** It must reflect something internal that keeps moving after the
+transmitted figure has been capped.
+
+We put less weight on this than we once did. The single range-12 frame is the last
+submerged reading of the day, arriving after all 69 range-13 frames, so the
+indicator fell rather than rose; and it comes from the logger that kept no payload,
+so its check bytes cannot be verified. One unverifiable frame is what the argument
+rests on.
 
 Taken with the temperature result above, the picture is of a raw internal
 conductance measurement that drives the range switching, and a separately
@@ -215,8 +221,8 @@ sensor is pushed into the ground.
 
 If a correction is ever wanted, the approach in the literature is to treat the
 measured conductivity as an indicator of dielectric loss and correct water content
-from both together (Skierucha & Wilczek, 2012, whose abstract describes determining
-bulk electrical conductivity from the imaginary part of the complex permittivity
+from both together (Wilczek et al., 2012, whose abstract describes determining bulk
+electrical conductivity from the imaginary part of the complex permittivity
 "without disregarding the dielectric losses"). Whatever is fitted should be fitted
 in soil rather than in water.
 

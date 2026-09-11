@@ -1,9 +1,29 @@
 # Raw Signal Captures
 
 Seventy-four raw IQ captures of WH52 transmissions, recorded on September 9 and 10,
-2026 at 915 MHz. Seventy-two contain at least one frame that passes both check
-bytes; `INVENTORY.csv` lists every such frame with its decoded fields and the full
-payload in hexadecimal.
+2026 at 915 MHz. **All seventy-four** contain at least one frame that passes both
+check bytes. `INVENTORY.csv` lists 77 readings, 69 of them distinct payloads, with
+the decoded fields and the full payload in hexadecimal.
+
+## How the inventory was built, and why it is built that way
+
+Every row was found by a demodulator and then **validated by arithmetic that does
+not depend on the demodulator**. A WH52 frame carries a CRC-8 and an eight-bit
+checksum, sixteen bits of redundancy, so a wrong payload satisfying both by chance
+is about one in 65,536.
+
+Candidates were pooled from two independent demodulators: rtl_433's flex decoder,
+and a separate implementation written for the purpose. Every candidate either tool
+produced was then checked against both bytes. The point of the pooling is that a
+fault in either tool can only cause a **miss**, never a false entry.
+
+That is not a theoretical concern. An earlier inventory was built from rtl_433
+alone, and it was missing three real frames that the second demodulator found;
+rtl_433 slips bits in the tail of a weak burst. The second tool found nothing the
+first did not, on 74 of the 77 readings, and the three it added are marked in the
+errata. Completeness is the thing neither tool can guarantee: both detect bursts by
+a signal-strength threshold, so a transmission close to the noise floor is invisible
+to both.
 
 These exist for two reasons. The conductivity value is a 20-bit number assembled
 from three bytes, and its top four bits are zero below 2,560 µS/cm. Ordinary soil
@@ -13,8 +33,11 @@ of evidence that lets someone check a decode without owning the hardware.
 
 ## Format
 
-Unsigned 8-bit complex baseband, 1.024 Msps, centered on 915 MHz. This is the
-format rtl_433 writes with `-S all` and reads with `-r`.
+Unsigned 8-bit complex baseband, 1.000 Msps, centered on 915 MHz. This is what
+rtl_433 writes with `-S all` and reads back with `-r`; the rate is in the filename,
+which is where `-r` takes it from. An earlier version of this file said 1.024 Msps,
+which is wrong: at that rate the bit period would not come out at the WH52's 58
+microseconds.
 
 ```
 rtl_433 -c 0 -r g55271_915M_1000k.cu8 \
@@ -24,24 +47,34 @@ rtl_433 -c 0 -r g55271_915M_1000k.cu8 \
 The `-c 0` matters if you have a configuration file that publishes to MQTT.
 Replaying captures without it will republish stale readings to a live broker.
 
-## Every capture holds the same frame twice
+## A WH52 sends each reading twice
 
-A WH52 sends each reading twice, 43 milliseconds apart, and a capture that catches
-one copy almost always catches both. Decoding a file therefore yields two identical
-payloads, and `INVENTORY.csv` lists such a pair once. Where a file yields two
-*different* payloads it gets two rows; one capture caught two different sensors
-transmitting inside the same window.
+Of the 77 readings, **39 appear twice within their own capture and 38 appear once**.
+The single ones are mostly explained by file length: 28 of the 74 captures are
+131,072 bytes, which is 65.5 milliseconds, and two copies about 43 milliseconds
+apart do not reliably both fit.
 
-This is worth knowing before counting anything. These files produce 160 valid
-frames but only 74 distinct readings, and 67 distinct payloads, since a sensor
-reporting an unchanged value twice in a row transmits the identical 24 bytes.
+`INVENTORY.csv` lists a repeated pair once. Where a file yields two *different*
+payloads it gets two rows; three captures caught two sensors transmitting inside the
+same window.
+
+**The interval is about 43 milliseconds, and we cannot pin the last digit.** Two
+measurements disagree slightly: rtl_433's decode timestamps give 43.2 to 43.4
+milliseconds over 25 pairs, and independent burst detection gives 43.0 to 44.0 over
+39 pairs with about 0.3 milliseconds of its own jitter. Both agree it is a fixed
+firmware delay rather than anything adaptive. Neither copy carries a flag
+distinguishing it from the other, so a receiver sees the same reading arrive twice
+and should expect that.
+
+Count carefully: 77 readings, 69 distinct payloads, because a sensor reporting an
+unchanged value twice in a row transmits the identical 24 bytes.
 
 ## What is covered
 
 | Condition | Readings |
 |---|---|
-| Dry air | 27 |
-| Soil, from sensors in service | 22 |
+| Dry air | 29 |
+| Soil, from sensors in service | 23 |
 | Tap water with salt, 2,191 to 2,333 µS/cm | 7 |
 | 3,405 to 3,739 µS/cm | 4 |
 | 4,940 to 5,132 µS/cm | 10 |
@@ -69,29 +102,23 @@ The `desk_spare` frames come from a sensor that has never been wetted or placed 
 soil, which is the closest thing here to a control, and even it moved 5 counts
 between groups. This is discussed in [../../behavior.md](../../behavior.md).
 
-## The two files with no valid frame
+## The frame we published as corrupt was not
 
-`g57185_915M_1000k.cu8` and `g122181_915M_1000k.cu8` contain WH52 transmissions
-that fail both check bytes. They have no inventory rows and are kept on purpose.
-
-The instructive one is `g57185`:
+An earlier version of this file presented `g57185_915M_1000k.cu8` as a worked
+example of a corrupt transmission, given away by a battery voltage of 3,240 mV from
+an AA cell. That was our decoder, not the sensor. The second demodulator recovers
 
 ```
-a20070f4028a0048200080166948937e7cccf7e6a213561e
+a20070f4028a0048200080166948937e7cce7bf35109ab0f
 ```
 
-Most of it looks perfectly ordinary: 0 percent moisture, raw 584, 25.0 °C, 5.0
-µS/cm, range indicator 1. Every one of those is a plausible reading for the sensor
-it came from. The corruption shows only in the tail, where byte 20 gives a battery
-voltage of 3,240 mV from a single AA cell.
+which passes both check bytes and gives 1,620 mV. The two decodes agree byte for
+byte until the tail. The frame is now in the inventory, along with two others found
+the same way.
 
-Neither check byte passes. The CRC is `0x56` against a computed `0xb9`, and the
-checksum `0x1e` against `0x82`. This is what a bad frame looks like when nothing
-about the numbers warns you, and it is the argument for verifying both.
-
-Two further frames elsewhere in the set pass the checksum but fail the CRC. Their
-files are listed, because each also contains a good frame; only the bad copies are
-absent from the inventory.
+The lesson we drew from it was right and the example was wrong. Verify both check
+bytes: our own mis-decode produced a payload whose moisture, temperature and
+conductivity all read plausibly, and only the battery byte looked absurd.
 
 ## Columns in INVENTORY.csv
 

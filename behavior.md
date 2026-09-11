@@ -24,8 +24,10 @@ is still water-repellent, which means moisture is unlikely to have been evenly
 distributed within any sample.
 
 Frames were captured over the radio using a flex decoder, described in
-[decoder.md](decoder.md). A total of 1,016 valid frames were recorded during the
-conductivity work and a further set during the moisture sweep.
+[decoder.md](decoder.md). The conductivity work produced 1,016 rows, but two loggers
+ran concurrently for part of it and heard many of the same transmissions, so the
+rows contain 218 duplicates. **798 distinct transmissions.** Counts below are of
+distinct transmissions, not rows.
 
 ## Moisture
 
@@ -87,10 +89,10 @@ Fitting raw against temperature over every dry-air frame in
 
 | Sensor | Frames | Temperature range | Slope | Largest residual |
 |---|---|---|---|---|
-| ne | 48 | 14.7 to 34.7 °C | +2.47 counts/°C | 30 counts |
-| nw | 41 | 19.9 to 25.5 °C | −2.14 | 29 |
-| se | 74 | 16.4 to 24.0 °C | +0.71 | 28 |
-| sw | 50 | 14.4 to 35.2 °C | +0.94 | 26 |
+| ne | 34 | 14.7 to 34.7 °C | +2.69 counts/°C | 31 counts |
+| nw | 28 | 19.9 to 25.5 °C | −1.86 | 28 |
+| se | 56 | 16.4 to 24.0 °C | +0.05 | 26 |
+| sw | 31 | 14.4 to 35.2 °C | +0.79 | 26 |
 
 The slopes disagree with each other in magnitude and in sign, and the scatter around each line is about
 thirty counts, which is three percentage points. **There is no temperature coefficient to be had from
@@ -230,8 +232,8 @@ count or two per transmission. So a sensor that is visibly wet reads at the dry 
 of the moisture scale almost immediately.
 
 Conductivity does not follow it. Taking every frame in the conductivity series
-where a sensor was out of the solution, 255 of 307 read at the floor and the other
-52 range from 15 µS/cm up to 2,272, a film of solution still bridging the
+where a sensor was out of the solution, 164 of 199 read at the floor and the other
+35 range from 15 µS/cm up to 2,272, a film of solution still bridging the
 electrodes. **A moisture reading near zero does not mean a sensor is dry or
 clean.** Conductivity is the measurement that notices.
 
@@ -285,8 +287,8 @@ and is described in [data/](data/).
 
 | Range indicator | Conductivity observed | Frames | Sensors submerged |
 |---|---|---|---|
-| 1 | 4.7 to 360 µS/cm | 665 | all four |
-| 2 | 907 to 1,079 | 32 | all four |
+| 1 | 4.7 to 360 µS/cm | 451 | all four |
+| 2 | 907 to 1,079 | 28 | all four |
 | 3 | 1,331 to 2,028 | 44 | all four |
 | 4 | 2,273 to 2,979 | 32 | all four |
 | 5 | 3,101 to 3,576 | 33 | all four |
@@ -299,16 +301,22 @@ and is described in [data/](data/).
 Ranges 9 through 11 were not observed. Conductivity was raised in a single large
 step through that region and we did not return to fill it.
 
-Range 1 counts include 665 frames, but 345 of those come from a capture program
+Range 1 counts 451 transmissions, but 334 of those come from a capture program
 that discarded frames where the indicator was not 1. See [data/](data/) for why
 that portion of the record is not evidence of anything.
 
 **The indicator continues to change after the conductivity reading has stopped.**
 At the 10,000 µS/cm ceiling, where all four sensors report the same clamped value,
-the indicator was observed at 12 and then at 13. Whatever it is counting is still
-rising after the transmitted conductivity has saturated. Range 8 appears once in
-our record, at 6,040 µS/cm, which is below the ceiling; an earlier version of this
-document listed it among the clamped readings by mistake.
+the indicator was observed at 13 for 69 frames and at 12 for one. What it is
+counting therefore moves while the transmitted value does not.
+
+Two cautions about that single frame. It is the **last** submerged frame, at
+10:25:20, after every one of the 69 range-13 frames, so the indicator fell rather
+than rose; an earlier version of this document said it rose. And it comes from the
+logger that kept no payload, so its CRC cannot be checked. The conclusion that the
+indicator is not a function of the transmitted value rests on one unverifiable
+frame. Range 8 appears once in our record, at 6,040 µS/cm, which is below the
+ceiling and not part of this.
 
 The indicator does not rescale the conductivity value. The underlying count rises
 continuously through every transition, with no jump or change of slope. Range four
@@ -349,7 +357,7 @@ The soil in our sweep measured between 5 and 137 µS/cm, which places it entirel
 within the region where we could not detect the effect.
 
 We would not extend these numbers to soil. The measurements were taken in water,
-and the published literature reports the opposite sign in soil. This is discussed
+which is not the situation the claim would be about. This is discussed
 in [interpretation.md](interpretation.md) and in [errata.md](errata.md).
 
 ## Raw signal captures — verifying the conductivity arithmetic
@@ -358,9 +366,9 @@ A second session on the afternoon of September 9 recorded raw IQ captures at con
 conductivities, specifically to test the parts of the conductivity decode that ordinary readings never
 reach. Conductivity was raised from tap water with table salt in four stages while all four back lawn
 sensors sat in the same cup, and a fifth condition was captured afterwards with the sensors rinsed and
-dry. Seventy-four capture files were kept, of which seventy-two contain at least one frame passing both check
-bytes. They are in [data/captures/](data/captures/) with their decodes in `INVENTORY.csv`. Thirty of them
-are the dry-air work described above.
+dry. Seventy-four capture files were kept and all seventy-four contain at least one frame passing both
+check bytes. They are in [data/captures/](data/captures/) with their decodes in `INVENTORY.csv`: 77
+readings, 69 of them distinct payloads, 29 of them dry air.
 
 The conductivity value is a 20-bit number assembled from three bytes, and the top four bits live in the
 same byte as part of the moisture measurement. Those top bits are zero below 2,560 µS/cm, which is above
@@ -369,7 +377,7 @@ there would be invisible.
 
 | Range indicator | Carry bits | Frames | Conductivity |
 |---|---|---|---|
-| 1 | 0 | 49 | 5 µS/cm |
+| 1 | 0 | 52 | 5 µS/cm |
 | 4 | 0 | 7 | 2,191 – 2,333 |
 | 5 | **1** | 4 | 3,405 – 3,739 |
 | 7 | **1** | 8 | 4,940 – 5,112 |
@@ -412,11 +420,13 @@ that exists rather than merely a good sample of them.
 
 ## Radio behavior
 
-**Each reading is sent twice, 43 milliseconds apart.** Every raw capture that contains a decodable frame
-contains it twice, with an identical payload. Measured across 25 pairs the interval is 43.2 to 43.4
-milliseconds, which is tight enough to be a fixed firmware delay rather than anything adaptive. Neither
-copy carries a flag distinguishing it from the other, so a receiver sees the same reading arrive twice
-and should expect that.
+**Each reading is sent twice, about 43 milliseconds apart.** Of the 77 readings in the captures, 39 appear
+twice within their own file and 38 once, the single ones mostly because 28 of the captures are only 65.5
+milliseconds long. We cannot pin the last digit of the interval: rtl_433's decode timestamps give 43.2 to
+43.4 milliseconds over 25 pairs, and independent burst detection gives 43.0 to 44.0 over 39 pairs with
+about 0.3 milliseconds of its own jitter. Both are tight enough for a fixed firmware delay rather than
+anything adaptive. Neither copy carries a flag distinguishing it from the other, so a receiver sees the
+same reading arrive twice and should expect that.
 
 The sensors transmit approximately every 70 seconds when readings are stable, and
 approximately every 10 seconds while a reading is changing. The return to the

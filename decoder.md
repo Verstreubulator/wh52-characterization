@@ -80,8 +80,9 @@ error when read cold, and it is not.
 ## Checking a frame
 
 Both check bytes should be verified. We recorded one frame in 671 that passed the
-sum check while decoding to a temperature of 89 °C and a range indicator that
-could not be valid. The CRC would have rejected it.
+sum check while decoding to a temperature of 89 °C, a conductivity of 10 µS/cm on a
+sensor lying in air, and a byte 11 whose low nibble is 12 where every other frame we
+have has 6. The CRC would have rejected it.
 
 A second bad frame is kept in [data/captures/](data/captures/) as a worked
 example. It fails both check bytes, and unlike the first one, nothing in its

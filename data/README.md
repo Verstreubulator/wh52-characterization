@@ -125,7 +125,12 @@ lowered again by dilution to fill gaps in the range.
 
 The rows are not homogeneous, and the difference matters.
 
-**Logger 1**, marked `1 (filtered)`, ran from 07:15 to 08:41. It discarded any
+**Two loggers overlapped, so the file contains duplicates.** 1,016 rows, 798
+distinct transmissions; 169 transmissions were heard by both loggers and 49 logged
+twice by one of them. Deduplicate on time, probe and values before counting
+anything.
+
+**Logger 1**, marked `1 (filtered)`, ran from 07:15:57 to 09:14:07. It discarded any
 frame where byte 11 was not `0x16`, on the mistaken assumption that the byte was
 constant and could serve as a validity check. It also did not record `ec_raw` or
 `byte8`, so those columns are empty for its rows.
@@ -146,11 +151,12 @@ The conductivity figures are the sensors' own readings. That is sufficient for t
 questions asked of this data, which concern the sensor's internal behavior, but it
 is not sufficient to calibrate the conversion itself.
 
-Temperature drifted between roughly 11 °C and 24 °C during the day as the sensors
-moved between outdoors and indoors. This turned out to affect where the range
+Temperature across the valid rows spans 12.5 °C to 37.7 °C as the sensors moved
+between outdoors and indoors and sat in the sun. This turned out to affect where the range
 indicator switches, and is discussed in
 [../interpretation.md](../interpretation.md).
 
-One frame decodes to a temperature of 89.4 °C and a range indicator of 12. It
-passes the checksum and fails the CRC. It is left in deliberately, as an example
+One frame decodes to a temperature of 89.4 °C, a conductivity of 10 µS/cm on a
+sensor lying in air, and byte 11 as `0x2c`, whose low nibble is 12 where every
+other row in the file has 6. It passes the checksum and fails the CRC. It is left in deliberately, as an example
 of why both check bytes should be verified.
