@@ -1,0 +1,5 @@
+# Text files are stored with LF. Captures are binary.
+*.md   text eol=lf
+*.csv  text eol=lf
+*.py   text eol=lf
+*.cu8  binary
