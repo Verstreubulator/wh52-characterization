@@ -131,13 +131,16 @@ easy to find rather than buried.
 voltage at byte 15, which was wrong; all four of the units it was derived from
 sat at nearly the same voltage, so a coincidence looked like a correlation. He
 located it at byte 20 by looking at a wider range of voltages, renamed the
-conductivity field, and wrote the fix himself as pull request 3668. He owns WH52
-units on 868 MHz in Europe, which makes him the only person I know of who could
-check any of this on different hardware.
+conductivity field, and wrote the fix himself as pull request 3668. They have said they run the
+868 MHz European variant of the sensor (rtl_433 pull request 3636, comment), which
+makes them the only person we know of who could check any of this on different
+hardware. Everything here comes from four 915 MHz units of a single batch in one
+garden.
 
 **Benjamin Larsson (merbanan)** and the rtl_433 contributors wrote and maintain
-the software that makes any of this possible, and reviewed the decoder that
-started it. **gdt** reviewed the battery correction.
+the software that makes any of this possible. **Christian Zuckschwerdt** reviewed
+the decoder that started this, and later corrected the test expectations after the
+battery fix landed. **gdt** reviewed and merged the battery correction.
 
 **Peter (pbkhrv)** maintains the rtl_433 Home Assistant add-on used for every
 radio capture here.

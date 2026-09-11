@@ -69,9 +69,10 @@ ec_range       = b11 >> 4
 ```
 
 The 25.6 divisor was fitted empirically in July against readings from the
-manufacturer's gateway. Note that every reading used to establish it was taken in
-ordinary soil, which means it has only ever been checked with the range indicator
-at 1. Ranges 2 through 13 use the same divisor with nothing verifying it.
+manufacturer's gateway, over a stepped salt-water series of eleven points from 340
+to 7,430 µS/cm. That span covers range indicators 1 through 8, so the divisor is not
+a soil-only result. An earlier version of this file said otherwise; it was wrong.
+Ranges above 8 remain unchecked.
 
 Byte 8 carries two unrelated fields at once. Its high nibble belongs to the raw
 moisture value and its low nibble to the conductivity value. This looks like an

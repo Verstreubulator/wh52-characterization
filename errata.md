@@ -86,10 +86,11 @@ conductivity our own soil reaches.
 Early conductivity data appeared to show the range thresholds doubling, at roughly
 625, 1,250 and 2,500 µS/cm. It fit the first four ranges.
 
-It failed on the fifth. Range 4 spans raw counts 63,838 to 76,249, which straddles
-65,536 without changing, ruling out any scheme based on powers of two. Linear
+It failed on the fifth. Range 4 spans raw counts 58,176 to 76,249, which straddles
+65,536 without changing, ruling out any scheme based on powers of two. The proposed
+2,500 µS/cm threshold also falls inside range 4 rather than at its edge. Linear
 spacing does not fit either: the constraints from the two most tightly bracketed
-boundaries are incompatible with range 1 still holding at 339 µS/cm.
+boundaries are incompatible with range 1 still holding at 360 µS/cm.
 
 Some of that irregularity is probably temperature, which was drifting through the
 measurements while we were treating the thresholds as fixed. We have not
@@ -161,8 +162,7 @@ The owner had suggested a deposit, the number was stable across three sensors, a
 a never-wetted control appeared not to move at all.
 
 Reading the same sensors again fifteen minutes later, after they had been carried
-to a different place, moved two of them by 19 and 21 counts. Both then read below
-their never-wetted baselines rather than above. The control moved 5 counts without
+to a different place, moved two of them by 17 and 21 counts. The control moved 5 counts without
 being touched.
 
 The residual was the same size as the measurement's dependence on where the sensor
@@ -279,6 +279,43 @@ Its authors are Fragkos, Loukatos, Kargas and Arvanitis.
 
 Both were caught by querying the identifiers we had ourselves published. Neither
 would have been caught by reading, and both name real people.
+
+## Arguments that were weaker than we made them sound
+
+An outside review read the whole repository for claims stated more strongly than
+the evidence allows. These survived our own four passes because they read well.
+
+**The temperature encoding was called "unlikely to be a coincidence".** We noted
+that our sensors encode temperature as an unsigned value scaled by 0.1 with 40
+subtracted, matching a −40 to +80 °C module specification. So do six other Fine
+Offset devices with no soil module in them; `fineoffset.c` applies the same
+conversion to all of them, and its comments give the range as −40 to +60. It is a
+house convention and carries no evidential weight at all.
+
+**The temperature explanation for the range indicator was called our best supported
+inference.** Any coefficient above about 1.55 percent per degree removes the
+inversion, so the data bound the coefficient rather than choosing 2 percent. The two
+readings are also an hour apart with the sensor removed and re-immersed between, so
+hysteresis in the range switching is an alternative we never considered.
+
+**The conversion lines were called straight to better than half a percentage
+point.** Three of the four largest residuals exceed 0.5. The fitted points span 2 to
+64 percent on one unit and 2 to 57 on another, not 0 to 96, so the raw-at-100-percent
+column is an extrapolation on three of four sensors. The stated fitting rule also did
+not match the rule actually used.
+
+**The conductivity-against-moisture table was presented as a controlled series.**
+Temperature varied across it by five degrees and the sensors were lifted out and
+re-inserted between stages.
+
+**The rank-order tally was not reproducible.** We gave "fifteen orderings in
+twenty-four windows" without saying how the windows were aligned; a different
+alignment gives twelve in twenty-three. The conclusion holds, the number was never
+checkable.
+
+**Two smaller ones.** The divisor was said to have been checked only at range 1,
+when the July series spanned 340 to 7,430 µS/cm; and a second sensor was credited
+with a reading that belongs to the first.
 
 ## Capture files were lost between listing them and fetching them
 

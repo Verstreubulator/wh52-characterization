@@ -96,8 +96,8 @@ There is a serious practical difficulty with the air anchor, and it is worse tha
 the one we first described.
 
 The air reading is not reproducible. Carrying the same sensors from one room to
-another, with nothing else changed, moved two of them by 19 and 21 counts, which is
-about two percentage points. Within a single session the same sensors repeat to
+another moved two of them by 17 and 21 counts, about two percentage points. The
+reported temperature also changed by up to 2.9 °C, which we cannot correct for. Within a single session the same sensors repeat to
 within one count, so the instrument is fine; what changes is what is near it. In
 air, the sensing volume contains whatever the sensor is resting on and whatever is
 beside it.
@@ -134,14 +134,21 @@ Converting both readings back to uncorrected conductance using a coefficient of 
 percent per degree gives 4,509 and 4,618, which are in the correct order. A second
 sensor behaves the same way.
 
+Two caveats we should have given. Any coefficient above roughly 1.55 percent per
+degree removes both inversions, so the data put a floor under the coefficient
+rather than selecting 2 percent. And the two readings are an hour apart in
+different solutions, with the sensor lifted out and re-immersed in between, so
+hysteresis in the range switching is an alternative we cannot exclude.
+
 The published register map for the commodity module discussed in
 [hardware.md](hardware.md) documents a conductivity temperature coefficient with a
 default of exactly 2 percent per degree Celsius (Seeed Technology, 2020). We
 arrived at that figure independently before finding the documentation.
 
 **An inversion disappearing under a model is stronger evidence than a curve
-fitting**, and we regard this as the better supported of our inferences. It rests
-on two sensors and four readings, which is not many.
+fitting.** It rests on two sensors and four readings, which is not many, and on the
+two caveats above. We used to call this our best supported inference. That was too
+strong.
 
 We were not able to determine the rule governing where the thresholds fall. They
 are uneven when expressed as reported conductivity, and we do not have enough
@@ -175,12 +182,14 @@ value stops.
 ## The conductivity ceiling is a product limit
 
 All four sensors stop at 10,000 µS/cm, while the data field carries values up to
-roughly 41,000. The commodity module's published specification is 0 to 10,000
-µS/cm.
+roughly 41,000.
 
 **This suggests the limit is set by the sensing element or the firmware rather
-than by the transmission format**, and that the unused headroom in the field is
-not an oversight.
+than by the transmission format**, and the unused headroom in the field is not an
+oversight. Which of the two we cannot say. The commodity module is little help: its
+specification page says 0 to 10,000 µS/cm while its own register map says 0 to
+20,000, and a sibling product from another vendor is specified to 20,000. A product
+decision is at least as likely as a limit of the sensing element.
 
 ## Differences between units are probably physical
 

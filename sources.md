@@ -4,6 +4,14 @@
 
 Ecowitt. (n.d.). *WH52 soil sensor*. https://www.ecowitt.com/shop/goodsDetail/371
 
+Ecowitt. (2026). *WH52 soil sensor user manual*.
+https://oss.ecowitt.net/uploads/20260130/WH52UserManual.pdf
+Gives the WH52 temperature range as −40 to +60 °C, moisture accuracy ±5 percent,
+conductivity accuracy ±100 µS/cm below 1,000 and ±15 percent above, an FR-4 probe
+and the FDR method, and notes that readings below 0 °C are unreliable. Our
+per-unit spreads sit inside those tolerances, which is worth knowing before
+treating them as defects.
+
 Ecowitt. (2025). *WH51 soil moisture sensor manual*.
 https://oss.ecowitt.net/uploads/20251226/WH51Manual.pdf
 

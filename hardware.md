@@ -59,11 +59,15 @@ The manual does not say how the module measures moisture. It says only that the
 method "is in line with international standards", so the comparison above is of
 range, not of technique.
 
-The temperature encoding is the detail that first drew our attention. Our sensors
-transmit temperature as an unsigned value scaled by 0.1 with 40 subtracted, which
-is exactly how one would encode a range of −40 to +80 °C without a sign bit. That
-range is the published specification for this module family, and it is unlikely to
-be a coincidence.
+The temperature encoding first drew our attention, and on checking it turned out to
+carry no weight. Our sensors transmit temperature as an unsigned value scaled by 0.1
+with 40 subtracted. So do the WH5, WH24, WH25, WH32, WH40 and WH0530, none of which
+contain a soil module: `fineoffset.c` applies the same `(raw − 400) × 0.1` to all of
+them. It is Fine Offset's house convention, not evidence of a shared sensing
+element. The comments in that file give the resulting range as −40 to +60 °C, and
+Ecowitt's own WH52 manual specifies −40 to +60, not the module's −40 to +80.
+
+What remains is the conductivity ceiling.
 
 The conductivity ceiling is the second. Our four probes clamp at 10,000 µS/cm,
 which matches the module specification, while the data field itself has room for

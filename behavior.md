@@ -44,7 +44,7 @@ four different straight lines.
 | se | 32 | 10.06 | 607 | 1613 | 0.51 points |
 | sw | 38 | 9.86 | 640 | 1625 | 0.53 points |
 
-The fit uses every unclamped frame in
+The fit uses frames between 2 and 70 percent with conductivity below 300 uS/cm, in
 [data/moisture-frames-20260909.csv](data/moisture-frames-20260909.csv), the settled values in
 [data/moisture-sweep-20260909.csv](data/moisture-sweep-20260909.csv), and one point per sensor from
 [data/reference-frames-202607.csv](data/reference-frames-202607.csv), which is the
@@ -53,9 +53,11 @@ or 100 percent, are excluded because the raw value keeps moving there while the 
 Those July points were taken two months earlier and land on the same lines, which is worth more than the
 residuals: the conversion is a stable property of each unit rather than a state it was in that morning.
 
-Each line is straight to better than half a percentage point across a span of 0 to
-96 percent, which is the limit of what the sensor's whole-number output can
-resolve. There is no curvature to be found.
+The largest residual on each line is about half a percentage point, the limit of
+what a whole-number output can resolve, and there is no curvature to be found. The
+fitted points span 2 to 64 percent on ne, 2 to 96 on nw, 2 to 61 on se and 2 to 57
+on sw, so only one unit is fitted near the top and the raw-at-100-percent column is
+an extrapolation for the other three.
 
 The differences between units are larger than the fit error. Slopes differ by 5.2
 percent and zero points by 33 counts, which is about three percentage points of
@@ -73,10 +75,11 @@ Submerged in water, all four sensors reported exactly 100 percent while their ra
 values ranged from 1646 to 1669, in each case at or above that unit's own fitted
 100 percent point. The raw value continues to rise after the percentage has stopped.
 
-One frame captured a sensor mid-immersion reading 96 percent at a raw value of
-1593, which is an unclamped reading near the top of the range. Its fitted line
-predicts 96.1 percent. A second sensor produced a similar reading later the same
-morning at 1585, also reporting 96 percent.
+`back_lawn_nw` reported 96 percent three times that morning, at raw 1593, 1594 and
+1585, each an unclamped reading near the top of its range. Its fitted line predicts
+96.1 percent at 1593. Two other sensors also reported 96 percent, `se` at 1571 to
+1574 and `sw` at 1588, which is the per-unit spread again rather than a
+disagreement.
 
 ### We could not measure a temperature effect
 
@@ -265,8 +268,9 @@ level. Agreement that close is a ceiling, not a measurement.
 **That is one solution at one moment, and it should not be generalised.** Taking
 every three-minute window in which all four sensors reported, the apparent
 disagreement ranges from under 1 percent to over 20, and the order changes
-constantly: each sensor is the lowest reader in some windows and the highest in
-others, across fifteen different orderings in twenty-four windows.
+constantly. The exact tally depends on how the windows are aligned, which is why we
+give none: one alignment gives fifteen orderings in twenty-four windows, another
+twelve in twenty-three. What is robust is that no ordering persists.
 
 Most of those windows are during salt addition, when the solution was not
 necessarily uniform, so they are not clean measurements of anything. That is the
@@ -318,9 +322,11 @@ indicator is not a function of the transmitted value rests on one unverifiable
 frame. Range 8 appears once in our record, at 6,040 µS/cm, which is below the
 ceiling and not part of this.
 
-The indicator does not rescale the conductivity value. The underlying count rises
-continuously through every transition, with no jump or change of slope. Range four
-ends at 76,249 counts and range five begins at 79,386.
+The indicator does not rescale the conductivity value. The counts either side of a
+transition are continuous with those within it: range four ends at 76,249 and range
+five begins at 79,386, with no discontinuity. We cannot say more than that. Salt was
+added in unmeasured steps, so there is no independent variable to plot against, and
+we have frames inside only one transition.
 
 Each sensor switches ranges at its own conductivity value, which follows from the
 units disagreeing with each other by 11 percent.
@@ -332,7 +338,10 @@ as high as 4,990 µS/cm and range 7 as low as 4,700. This is discussed in
 ### Conductivity depresses the moisture reading, above a threshold
 
 With sensors fully submerged, so that water content could not change, raising
-conductivity lowered the reported moisture.
+conductivity lowered the reported moisture. Temperature and placement changed too:
+the columns span 15.7 to 21.3 degrees, and the sensors were lifted out and
+re-inserted between stages. This is not a controlled series and we cannot correct
+for either.
 
 For each sensor and each conductivity below, the frame taken is the submerged one whose conductivity is
 nearest that value. The conductivity actually reached is given underneath, because the salt was added in
@@ -396,9 +405,9 @@ boundary while sitting in the same cup:
 | Sensor | count | conductivity | carry bits |
 |---|---|---|---|
 | `back_lawn_nw` | 130,854 | 5,111.5 µS/cm | 1 |
-| `back_lawn_se` | 131,131 | 5,122.3 | 2 |
+| `back_lawn_se` | 131,132 | 5,122.3 | 2 |
 
-277 counts apart, taken seconds apart in one solution, **and the theoretical boundary falls between
+278 counts apart, taken seconds apart in one solution, **and the theoretical boundary falls between
 them**. The disagreement between units, which is a nuisance everywhere else, is useful here.
 
 ### The range indicator and the carry are independent
@@ -413,7 +422,7 @@ is packed.
 ### Carry bits of 4 cannot occur
 
 A carry value of 4 would require a count of 262,144, which is 10,240 µS/cm. The sensor clamps at 10,000,
-and the highest count we ever recorded is 256,197 — short by 5,947.
+and the highest count we ever recorded is 256,198 — short by 5,946.
 
 **So 3 is the maximum the hardware can produce**, and captures covering 0, 1, 2 and 3 cover every value
 that exists rather than merely a good sample of them.
