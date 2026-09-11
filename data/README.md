@@ -1,8 +1,9 @@
 # Data
 
-The raw measurements behind every number in this repository. Both files were
-recorded on September 9, 2026, from Ecowitt WH52 sensors operating at 915 MHz in
-Coeur d'Alene, Idaho.
+The raw measurements behind every number in this repository. All of it comes from
+Ecowitt WH52 sensors operating at 915 MHz in Coeur d'Alene, Idaho, recorded on
+September 9 and 10, 2026, except `reference-frames-202607.csv`, which is from
+July.
 
 Five sensors appear. Four are identified by the position they occupy in a back
 lawn, where they had been installed since July and from which they had been
@@ -52,8 +53,10 @@ reading stable.
 | notes | Settling window, or why a value is missing |
 
 One value is absent. The sensor `back_lawn_se` produced no raw frame at the
-ordinary-soil level, because the radio saving the raw captures hears that
-particular unit poorly. Its percentage is recorded and its raw value is not.
+ordinary-soil level, so its percentage is recorded and its raw value is not. An
+earlier version of this file blamed poor reception of that unit. That is not
+supported: `back_lawn_se` contributes more rows than any other sensor in both frame
+files. We do not know why the frame is missing.
 
 ## reference-frames-202607.csv
 
@@ -73,7 +76,8 @@ The full payloads are here so nothing external is needed to check them.
 
 ## moisture-percent-20260909.csv
 
-70 readings from the four back lawn sensors between 07:03 and 07:28 on September 9,
+70 readings between 07:03 and 07:28 on September 9, 64 from the four back lawn
+sensors and 6 from the indoor spare,
 covering the first half of the moisture sweep. This came from the MQTT stream rather
 than from the radio logs, so it carries the reported percentage and temperature but
 **no raw value**. It is here because it is the only record of that window, and
@@ -107,7 +111,8 @@ condition; they are a sensor tracking soil that was being watered.
 ## conductivity-series-20260909.csv
 
 1,016 frames recorded between 07:15 and 10:29 while conductivity was raised from
-tap water at 319 µS/cm to the sensor's ceiling using ordinary table salt, and
+tap water, which the four sensors read as 278 to 329 µS/cm, to the sensor's
+ceiling using ordinary table salt, and
 lowered again by dilution to fill gaps in the range.
 
 | Column | Meaning |
