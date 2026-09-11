@@ -65,8 +65,8 @@ percent, not zero, and field capacity falls well below the top of the scale.
 ten gain ranges as conductivity rises, and reports which one it is using. The
 indicator keeps changing after the conductivity reading itself has hit its
 ceiling, so it is not derived from the transmitted value, and it is independent
-of the arithmetic carry in how that value is packed. The conversion constant in
-common use has only ever been checked in the lowest range.
+of the arithmetic carry in how that value is packed. What the indicator is counting,
+and where its thresholds fall, we could not work out.
 
 **The 20-bit conductivity arithmetic is verified.** Raw captures taken either
 side of the boundary locate it to within 11 µS/cm of where the arithmetic says

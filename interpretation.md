@@ -150,9 +150,10 @@ temperature is accounted for.
 
 ## The range indicator is not derived from the reported conductivity
 
-At the 10,000 µS/cm ceiling all four sensors report the same clamped value, to
-within 0.01 percent. The range indicator nonetheless moved from 8 to 12 to 13
-while that value stayed fixed.
+At the 10,000 µS/cm ceiling all four sensors report the same clamped value. Over
+one five-minute window they agree to 0.01 percent, and across the whole clamped
+period to 0.06 percent. The range indicator nonetheless moved from 12 to 13 while
+that value stayed fixed.
 
 **This means the indicator cannot be computed from the conductivity the sensor
 transmits.** It must reflect an internal measurement that continues to rise after

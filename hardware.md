@@ -27,7 +27,7 @@ it behaves after a few winters buried in wet soil.
 
 ## Why we looked outside Ecowitt
 
-Three attempts to find internal details produced nothing.
+Two attempts to find internal details produced nothing.
 
 No teardown of the WH52 appears to exist. Searches of teardown sites, electronics
 forums and the rtl_433 project history returned no photographs or component
@@ -52,9 +52,12 @@ radio devices, but their published specifications match the WH52 closely.
 |---|---|---|
 | Temperature range | −40 to +80 °C | Encoded with a −40 offset |
 | Conductivity range | 0 to 10,000 µS/cm | Hard ceiling at 10,000 µS/cm |
-| Moisture | 0 to 100 percent, FDR | FDR, 0 to 100 percent |
-| Probe material | Flame-retardant epoxy resin | FR-4 epoxy |
-| Temperature compensation | Built in, coefficient adjustable, default 2 percent | Behavior consistent with 2 percent |
+| Moisture | 0 to 100 percent of saturation | 0 to 100 percent |
+| Temperature compensation | Built in, adjustable, register default 2 percent per °C | Behavior consistent with 2 percent |
+
+The manual does not say how the module measures moisture. It says only that the
+method "is in line with international standards", so the comparison above is of
+range, not of technique.
 
 The temperature encoding is the detail that first drew our attention. Our sensors
 transmit temperature as an unsigned value scaled by 0.1 with 40 subtracted, which
@@ -68,29 +71,38 @@ values four times larger. A limit set by specification rather than by field widt
 suggests the constraint comes from the sensing element.
 
 The published register map for this module family also documents an EC temperature
-compensation coefficient with a default of 2 percent per degree Celsius (Seeed
-Technology, 2020). Our own measurements are consistent with that value, which is
+compensation coefficient at register `0x0022`, adjustable from 0 to 10 percent,
+with a default of 2 percent (Seeed Technology, 2020). Our own measurements are consistent with that value, which is
 discussed in [interpretation.md](interpretation.md).
 
 ## Where the hypothesis breaks down
 
+**The probes are not made of the same thing.** The module's manual gives the probe
+material as an anti-corrosion alloy electrode, with flame-retardant epoxy resin as
+the sealing compound. The WH52's blades are FR-4, which is a printed circuit board
+laminate. An earlier version of this document had the epoxy in the matching column,
+which was a misreading: it is the module's sealant, not its probe.
+
 The commodity module encodes temperature as a signed 16-bit value scaled by 0.01,
-with no offset. Our sensors use an unsigned value scaled by 0.1 with a −40 offset.
-These are different encodings of the same physical range.
+with no offset: register `0x0000`, `-4000` to `8000` for −40.00 to 80.00 °C. Our
+sensors use an unsigned value scaled by 0.1 with a −40 offset. These are different
+encodings of the same physical range.
 
 This suggests the WH52 is not a Modbus module with a radio bolted to it. It is
 more likely that Fine Offset uses the same sensing element and analog front end
 with their own firmware, re-encoding the measurements for a shorter radio frame.
 That is a common arrangement, but we cannot demonstrate it.
 
-The commodity module also exposes several fields the WH52 does not transmit,
-including a dielectric permittivity reading, salinity, total dissolved solids, and
-a soil-type selector offering separate calibration curves for mineral, sandy, clay
-and organic soils. If the WH52 shares the sensing element, those capabilities
+The commodity module also exposes several fields the WH52 does not transmit: a
+dielectric permittivity reading at register `0x0005`, salinity at `0x0003`, total
+dissolved solids at `0x0004`, and a soil-type selector at `0x0020` offering
+separate calibration curves for mineral, sandy, clay and organic soils. If the WH52 shares the sensing element, those capabilities
 likely exist inside it and are simply not sent over the radio.
 
 ## What would settle it
 
 Opening a unit and photographing the board would answer the question in a few
-minutes. We have not done this, because all eight of our sensors are in service
-and we are unwilling to sacrifice one.
+minutes. We have one spare that has never been planted, so this is a choice rather
+than an impossibility. We would rather keep a working spare than have the answer,
+which is worth stating plainly since it is the obvious next step and we are not
+taking it.

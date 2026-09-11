@@ -231,6 +231,34 @@ check("byte 18 is 0x7b on seven units and 0x8c on one",
 batch = {(d[:3], sorted(v)[0]) for d, v in per_unit[21].items()}
 check("byte 21 follows the identifier prefix", batch == {("005", 0x08), ("007", 0x09)})
 
+print("\nDocument text (phrases that must not reappear)")
+DOCS = {name: open(name, encoding="utf-8").read()
+        for name in ("README.md", "behavior.md", "interpretation.md", "decoder.md",
+                     "hardware.md", "errata.md", "sources.md")}
+CORRECTIONS = DOCS["errata.md"]
+BANNED = [
+    ("8 to 12 to 13", "range 8 is at 6,040, not at the ceiling"),
+    ("0.53 counts per degree", "no temperature coefficient is measurable"),
+    ("predicts 96.6", "the 1593 frame predicts 96.1"),
+    ("predicts 96.2", "the 1593 frame predicts 96.1"),
+    ("1646 to 1690", "submerged raw values are 1646 to 1669"),
+    ("read 7 percent", "no retained file contains that reading"),
+    ("3.3 to 4.1", "the zero point is permittivity 1.7 to 1.9"),
+    ("between 5 and 230", "the sweep soil reached 137"),
+    ("but 260 of those", "345 frames came from the filtered logger"),
+    ("only ever been checked in the lowest range",
+     "the July calibration spanned 340 to 7,430 uS/cm, which is ranges 1 to 8"),
+    ("only ever validated in ordinary soil",
+     "the July calibration spanned 340 to 7,430 uS/cm, which is ranges 1 to 8"),
+    ("Flame-retardant epoxy resin",
+     "that is the module's sealing compound; its probe is an alloy electrode"),
+]
+for phrase, why in BANNED:
+    where = [n for n, t in DOCS.items() if phrase in t and phrase not in CORRECTIONS]
+    outside_errata = [n for n in where if n != "errata.md"]
+    check(f'withdrawn wording absent: "{phrase}"', not outside_errata,
+          f"found in {outside_errata} ({why})" if outside_errata else why)
+
 print()
 if FAILED:
     print(f"{len(FAILED)} claim(s) do not reproduce:")
