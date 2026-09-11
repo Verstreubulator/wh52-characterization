@@ -75,95 +75,140 @@ One frame captured a sensor mid-immersion reading 96 percent at a raw value of
 predicts 96.2 percent. A second sensor produced a similar reading later the same
 morning at 1585, also reporting 96 percent.
 
-### Temperature affects the raw value
+### We could not measure a temperature effect
 
-Three sensors were left in open air overnight while the temperature fell about
-eight degrees Celsius. Moisture could not have changed, since they were in air.
-All three raw values fell.
+An earlier version of this document reported 0.53 counts per degree Celsius, from three sensors left in
+air overnight. Those three pairs of readings are not in any file we kept, and the figure does not survive
+contact with the data that is here.
 
-| Sensor | Raw at 19 to 20 °C | Raw at 11 to 12 °C | Change |
-|---|---|---|---|
-| nw | 580 | 575 | −4.5 |
-| se | 568 | 564 | −4.0 |
-| sw | 600 | 596 | −4.5 |
+Fitting raw against temperature over every dry-air frame in
+[data/conductivity-series-20260909.csv](data/conductivity-series-20260909.csv) gives this.
 
-This works out to approximately 0.53 counts per degree Celsius, or about one
-percentage point of moisture across a twenty degree swing.
-
-### The air reading is not a stable reference
-
-This started as a question about whether a rinsed sensor reads wet. It ended somewhere more useful, which
-is that a reading taken in air is not reproducible enough to serve as a reference point at all.
-
-Four sessions, same sensors, all normalised to 19.5 °C using the 0.53 counts per degree established above.
-
-| Sensor | Never wetted | Hours after a rinse | One day later | 15 minutes after that |
+| Sensor | Frames | Temperature range | Slope | Largest residual |
 |---|---|---|---|---|
-| nw | 580 | 620 | 588 | 586 |
-| se | 568 | 605 | 581 | 563 |
-| sw | 600 | 611 | 612 | 591 |
-| spare, never wetted | — | 583 | 583 | 588 |
+| ne | 48 | 14.7 to 34.7 °C | +2.47 counts/°C | 30 counts |
+| nw | 41 | 19.9 to 25.5 °C | −2.14 | 29 |
+| se | 74 | 16.4 to 24.0 °C | +0.71 | 28 |
+| sw | 50 | 14.4 to 35.2 °C | +0.94 | 26 |
 
-The last two columns are fifteen minutes apart. Both are a full day after the rinse, so nothing was
-drying. The only thing that happened in between is that the sensors were picked up and carried to a
-different place.
+The slopes disagree with each other in magnitude and in sign, and the scatter around each line is about
+thirty counts, which is three percentage points. **There is no temperature coefficient to be had from
+this data.** The next section explains why the scatter is that large.
 
-**Two of them moved by 19 and 21 counts.** That is about two percentage points, and it is larger than
-anything we had attributed to residue. Both now sit *below* their own never-wetted readings. The spare,
-which nobody touched, moved 5 counts.
+We are not claiming the sensor is insensitive to temperature. It is a reasonable thing to expect, the
+manufacturer's module documents temperature compensation for conductivity, and our own conductivity
+work is consistent with a 2 percent per degree correction there. We are saying only that we cannot
+measure an effect on the moisture reading, and that nobody should take a number from us for it.
 
-Within a single session the same sensor is almost perfectly repeatable: four frames from `se` minutes
-apart read 565, 566, 566, 566. So this is not noise in the measurement. It is the measurement correctly
-reporting that its surroundings changed.
+### The air reading is not reproducible
 
-That should have been obvious in advance. The sensor measures the permittivity of whatever is in its
-sensing volume, and in air that includes the bench it is lying on, its own packaging, the other three
-sensors next to it, and a hand that was recently holding it. "In air" is not one condition.
+The reason the scatter above is thirty counts is that a reading taken in air is not one condition.
 
-### What this does and does not establish
+The cleanest evidence is two sessions fifteen minutes apart on September 10. Both were a full day after
+the sensors had last been wet, both indoors, and the reported temperatures differ by less than three
+degrees. Between them the sensors were picked up and carried to a different place.
 
-**Withdrawn: the one-point residue.** We reported that rinsed sensors held about 8 to 13 counts above
-their never-wetted readings after a day, and that a deposit explained it. Relocation alone produces
-changes of the same size or larger, and after relocation two of the three read below their baselines
-instead of above. The residue was not measured; it was inferred from a difference that placement can
-produce on its own.
+| Sensor | Before | After | Change |
+|---|---|---|---|
+| nw | 590 at 22.6 °C | 588 at 23.4 °C | −2 |
+| se | 583 at 22.5 °C | 566 at 25.4 °C | **−17** |
+| sw | 614 at 22.8 °C | 593 at 22.5 °C | **−21** |
 
-**Still standing, with less precision than we claimed.** The offset within hours of a rinse was 40, 37
-and 11 counts, and the largest placement change we have seen is 21. So a wet sensor probably does read
-high. We can no longer put a number on how high or say how long it lasts, because the sessions differ in
-placement as well as in time.
+Seventeen and twenty-one counts is about two percentage points.
 
-**New, and the practical result:** an air reading is worth about ±20 counts, or two percentage points,
-unless the physical arrangement is controlled and repeated. That is comparable to the spread between
-units, which is the thing a two-anchor calibration exists to remove. This is discussed in
-[interpretation.md](interpretation.md).
+Within either session the same sensor barely moves. Four frames from `se` minutes apart read 565, 566,
+566, 566. An indoor spare that was never picked up read 586, 586 and 591 across both days. So this is not
+noise in the measurement; it is the measurement correctly reporting that its surroundings changed.
 
-To do better, the sensors would have to be read in a fixed jig, clear of surfaces and of each other, and
-returned to it each time. We have not built that.
+In hindsight this is what the instrument is for. It responds to the permittivity of whatever is in its
+sensing volume, and in air that includes the bench it is lying on, its packaging, and the other three
+sensors beside it.
 
-### Physical contact matters more than anything else### Physical contact matters more than anything else### Physical contact matters more than anything else
+**An air reading is worth about twenty counts, or two percentage points, unless the physical arrangement
+is fixed and repeated.** That is the same order as the spread between units. Doing better would need the
+sensor held clear of surfaces in a jig it returns to every time, and we have not built one.
 
-One sensor read 7 percent in the dew-damp soil, then 14 percent after being
-pressed in firmly. Nothing else changed. The reading doubled.
+### What we tried to conclude from the dry-air work, and could not
 
-Placed against the other errors we measured, contact is the largest by a
-considerable margin.
+We rinsed the sensors after the conductivity work and read them in air over two days, intending to find
+out whether a sensor that has been wet reads high, and for how long. We published two answers in turn and
+both are withdrawn. They are in [errata.md](errata.md), and the short version is here because the reason
+we failed is more useful than the answers were.
 
-| Source | Approximate size |
-|---|---|
-| Seating and soil contact | 7 percentage points |
-| Differences between units | 3 points |
-| Temperature across 20 °C | 1 point |
-| Conductivity within our soil's range | not measurable |
+The readings we have are these, as measured, with no correction applied.
+
+| Sensor | Air, never wetted | Hours after the rinse | One day later | Fifteen minutes after that |
+|---|---|---|---|---|
+| ne | 572 at 11.8 °C | — | — | 576 at 23.1 °C |
+| nw | 575 at 12.0 °C | 630 at 37.5 °C | 590 at 22.6 °C | 588 at 23.4 °C |
+| se | 564 at 11.2 °C | 614 at 36.3 °C | 583 at 22.5 °C | 566 at 25.4 °C |
+| sw | 597 at 12.0 °C | 620 at 37.2 °C | 614 at 22.8 °C | 593 at 22.5 °C |
+| spare, never wetted | 583 at 23.5 °C | 586 at 25.4 °C | 586 at 25.1 °C | 591 at 25.2 °C |
+
+Every column differs from the next in two ways at once. The sensors were wet for less time, and they were
+at a different temperature, and in one case they had also been moved. With no temperature coefficient and
+no control over placement, none of those differences can be assigned to a cause. **A sensor freshly out
+of water may well read high. We cannot show it from this.**
+
+The design fault was ours and it is simple. We changed more than one thing between measurements, then
+treated the difference as evidence about the thing we were interested in.
+
+### Where a sensor sits matters more than what it is
+
+Four sensors were placed in the same material at the same time, at each level of the sweep. They did not
+agree.
+
+| Level | ne | nw | se | sw | Spread |
+|---|---|---|---|---|---|
+| Dew-damp soil | 8 % | 10 % | 14 % | 11 % | 6 points |
+| Ordinary soil | 26 | 22 | 29 | 26 | 7 |
+| Sprinkler-watered | 26 | 27 | 34 | 31 | 8 |
+| Saturated | 63 | 63 | 60 | 56 | 7 |
+
+This is not the per-unit conversion. A sensor's raw value and its percentage come from the same reading
+of the same spot, so a conversion error moves both together along that sensor's own line and cancels.
+What is left is a real difference in what each sensor was sitting in: how firmly it went in, what it
+happened to be touching, and how the water was distributed in soil that was still water-repellent.
+
+The same effect is visible while a sensor is going into the ground. From the MQTT log, `sw` at ten-second
+intervals:
+
+```
+07:15:21   0 %
+07:15:31   5 %
+07:15:41   9 %
+07:15:51  31 %
+```
+
+It is the same mechanism as the air result above. The sensor reports the permittivity of its
+surroundings, and its surroundings are decided by how it is placed.
+
+### What the errors add up to
+
+Only the rows we can support from the published data.
+
+| Source | Size | Where it is shown |
+|---|---|---|
+| Where a sensor sits, in the same material | up to 8 points | the table above |
+| Between units, at the same raw value | about 3 points | 33 counts of zero-point spread |
+| Placement of one sensor in air | about 2 points | 17 to 21 counts |
+| Conductivity, below 300 µS/cm | not detectable | conductivity section below |
+| Temperature | not measurable | slopes disagree in sign |
+
+An earlier version of this table led with a single sensor reading 7 percent and then 14 percent after
+being pressed in firmly. That reading is in no file we kept, and we have replaced it with the four-sensor
+comparison, which says the same thing and can be checked.
 
 ## Conductivity
 
 ### The reading has a floor near 5 µS/cm
 
-Sensors in dry air report 4.7 to 5.4 µS/cm. Sensors submerged in distilled water,
-which has a true conductivity near 0.05 µS/cm, report 4.8 to 5.2. The two
-conditions are indistinguishable, so values near 5 should be read as the bottom of
-the scale rather than as measurements.
+Sensors in dry air report 4.7 to 5.4 µS/cm, and never lower. Air has no
+conductivity to speak of, so this is the bottom of the scale rather than a
+measurement, and values near 5 should be read that way.
+
+An earlier version of this document also cited readings in distilled water. We
+have no record of that measurement and have removed it.
 
 This matters for interpreting dry soil, which also reads near 5.
 
@@ -216,8 +261,10 @@ that portion of the record is not evidence of anything.
 
 **The indicator continues to change after the conductivity reading has stopped.**
 At the 10,000 µS/cm ceiling, where all four sensors report the same clamped value,
-the indicator was observed at 8, then 12, then 13. Whatever it is counting is
-still rising after the transmitted conductivity has saturated.
+the indicator was observed at 12 and then at 13. Whatever it is counting is still
+rising after the transmitted conductivity has saturated. Range 8 appears once in
+our record, at 6,040 µS/cm, which is below the ceiling; an earlier version of this
+document listed it among the clamped readings by mistake.
 
 The indicator does not rescale the conductivity value. The underlying count rises
 continuously through every transition, with no jump or change of slope. Range four

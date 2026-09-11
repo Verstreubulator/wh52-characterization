@@ -55,6 +55,14 @@ One value is absent. The sensor `back_lawn_se` produced no raw frame at the
 ordinary-soil level, because the radio saving the raw captures hears that
 particular unit poorly. Its percentage is recorded and its raw value is not.
 
+## moisture-percent-20260909.csv
+
+70 readings from the four back lawn sensors between 07:03 and 07:28 on September 9,
+covering the first half of the moisture sweep. This came from the MQTT stream rather
+than from the radio logs, so it carries the reported percentage and temperature but
+**no raw value**. It is here because it is the only record of that window, and
+because the insertion sequence quoted in [../behavior.md](../behavior.md) is in it.
+
 ## moisture-frames-20260909.csv
 
 338 individual frames from the four back lawn sensors between 07:15 and 09:14 on

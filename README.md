@@ -49,9 +49,9 @@ over a 915 MHz radio link, running from a single AA cell. Beyond that, the
 findings that seem most worth recording are these.
 
 **Each probe is individually calibrated, and the differences are substantial.**
-Four units measured across the same five moisture levels produced four different
-conversion curves, with slopes spanning 9.82 to 10.39 counts per percent and zero
-points spanning 604 to 635. In a single stirred solution the same four units
+Four units measured across the same soil levels produced four different conversion
+curves, with slopes spanning 9.86 to 10.37 counts per percent and zero points
+spanning 607 to 640. In a single stirred solution the same four units
 reported conductivity values 11 percent apart. Readings from different units are
 not directly comparable without accounting for this.
 
@@ -77,16 +77,19 @@ decode can be checked without any of our sensors.
 **Conductivity is capped at 10,000 µS/cm.** This is a product limit rather than a
 limit of the data field, which has unused headroom.
 
-**Physical contact with the soil dominates every other source of error.** One
-probe read 7 percent and then 14 percent in the same soil, before and after being
-pressed in firmly.
+**Where a probe sits matters more than which probe it is.** Four units placed in
+the same material at the same time reported readings 6 to 8 percentage points
+apart, at every level. That spread is not the per-unit conversion, which cancels.
 
-**A reading taken in air is not a stable reference.** Carrying the same sensors to
-a different room moved two of them by about two percentage points, while within a
+**A reading taken in air is not a stable reference.** Carrying the same probes to
+a different place moved two of them by about two percentage points, while within a
 session they repeat to within one count. In air the sensing volume includes the
-bench, the packaging and the neighbouring sensors. A sensor freshly out of water
-does read high, but we cannot say by how much or for how long, because our sessions
-differed in placement as well as in time.
+bench, the packaging and the neighbouring probes.
+
+**We could not measure a temperature effect on the moisture reading.** Fitting
+every dry-air frame gives slopes that disagree in sign between units, with scatter
+larger than any effect. An earlier version of this document gave a figure; it is
+withdrawn.
 
 ## A note on confidence
 

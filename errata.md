@@ -172,6 +172,38 @@ cause we were interested in. The control was supposed to guard against exactly
 that, and it did not, because it was in a different place from the sensors it was
 controlling for.
 
+## Three numbers were published that no retained file supports
+
+An audit of every quantitative claim in this repository against the data
+published alongside it found three that a reader could not have checked, because
+the measurements behind them were never kept.
+
+**A temperature coefficient of 0.53 counts per degree**, from three sensors left in
+air overnight. The warmer half of those readings is in no file we have. Fitting
+every dry-air frame we did keep gives slopes of +2.47, −2.14, +0.71 and +0.94
+counts per degree on the four units, with about thirty counts of scatter. The
+figure was withdrawn rather than corrected, because the data does not support any
+figure.
+
+**A sensor reading 7 percent and then 14 percent** in the same soil before and
+after being pressed in firmly. This was the headline example for contact being the
+dominant error. No retained file contains it. The claim it was making is well
+supported by four sensors in the same material differing by 6 to 8 points, which is
+what the document says now.
+
+**Readings in distilled water.** Cited as evidence that the conductivity floor is a
+floor rather than a measurement. We have no record of taking them. The conclusion
+stands on the dry-air readings alone and the distilled-water sentence is gone.
+
+Separately, the range indicator was said to have been seen at 8, 12 and 13 while
+conductivity was clamped at its ceiling. Range 8 occurs once in our record, at
+6,040 µS/cm, which is not at the ceiling. The point being made survives on 12 and
+13.
+
+The common thread is that none of this was caught by writing carefully. It was
+caught by running every number in the document against the files shipped with it,
+which is a thing worth doing before publishing rather than after.
+
 ## Capture files were lost between listing them and fetching them
 
 The radio node writes one raw capture per detected signal and keeps only about a hundred, so the pool
