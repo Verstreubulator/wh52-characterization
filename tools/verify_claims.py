@@ -211,8 +211,15 @@ check("capture conditions: 27 dry, 22 soil, 4 at the ceiling",
       (counted["dry"], counted["soil"], counted["ceiling"]) == (27, 22, 4), str(dict(counted)))
 dry_ec = [float(r["ec_uS_cm"]) for r in captures if int(r["moisture_pct"]) <= 1]
 dry_ec += [float(r["ec_uS_cm"]) for r in sweep if r["level"] == "air"]
-check("dry air spans 4.6 to 5.4 microsiemens", (min(dry_ec), max(dry_ec)) == (4.6, 5.2),
-      f"{min(dry_ec)} to {max(dry_ec)} in captures and sweep")
+check("air frames span 4.6 to 5.2 microsiemens", (min(dry_ec), max(dry_ec)) == (4.6, 5.2),
+      f"{len(dry_ec)} frames")
+outs = [r for r in series if int(r["m_raw"]) < 700 and r["time"] >= "08:00:00"]
+floor = [r for r in outs if float(r["ec_uS_cm"]) < 6]
+check("out of solution, 255 of 307 frames sit at the floor",
+      (len(floor), len(outs)) == (255, 307), f"{len(floor)} of {len(outs)}")
+above = [float(r["ec_uS_cm"]) for r in outs if float(r["ec_uS_cm"]) >= 6]
+check("the remainder read 15 to 2,272 microsiemens",
+      (min(above), max(above)) == (15.4, 2272.5), f"{min(above)} to {max(above)}")
 check("74 readings, 67 distinct payloads, 72 files",
       (len(captures), len({r["payload"] for r in captures}),
        len({r["file"] for r in captures})) == (74, 67, 72))
@@ -260,7 +267,8 @@ BANNED = [
      "not confirmable from the abstract we have"),
     ("held the same rank order", "the order changes from window to window"),
     ("rank order among the four was stable", "the order changes from window to window"),
-    ("4.7 to 5.4", "the published dry-air minimum is 4.6"),
+    ("4.7 to 5.4 µS/cm, and never lower", "the air-frame range is 4.6 to 5.2"),
+    ("report 4.6 to 5.4", "the air-frame range is 4.6 to 5.2"),
     ("Flame-retardant epoxy resin",
      "that is the module's sealing compound; its probe is an alloy electrode"),
 ]

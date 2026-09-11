@@ -204,14 +204,43 @@ comparison, which says the same thing and can be checked.
 
 ### The reading has a floor near 5 µS/cm
 
-Across every dry-air frame we have published, sensors report 4.6 to 5.4 µS/cm. Air has no
+Across the 32 frames we can positively place in air, being the five air rows of the
+sweep and the dry-air captures, conductivity reads **4.6 to 5.2 µS/cm**. Air has no
 conductivity to speak of, so this is the bottom of the scale rather than a
 measurement, and values near 5 should be read that way.
 
-An earlier version of this document also cited readings in distilled water. We
-have no record of that measurement and have removed it.
+Two earlier versions of this paragraph were wrong. One cited readings in distilled
+water, which we have no record of taking. The other gave 4.7 to 5.4 from a pool
+that included frames taken between submersions rather than in air.
 
 This matters for interpreting dry soil, which also reads near 5.
+
+### Out of water, the two measurements come apart
+
+Lifted straight out of the salt solution, the moisture reading collapses within a
+single transmission. At a steady 20 to 21 °C, without the sensor being moved:
+
+```
+back_lawn_se   08:24:50  raw 1406      08:26:01  raw 606   →  590 over the next 71 s
+back_lawn_nw   08:02:59  raw 1517      08:04:12  raw 641   →  625 over the next 4 min
+```
+
+About eight hundred counts in roughly seventy seconds, then a slow drift of a
+count or two per transmission. So a sensor that is visibly wet reads at the dry end
+of the moisture scale almost immediately.
+
+Conductivity does not follow it. Taking every frame in the conductivity series
+where a sensor was out of the solution, 255 of 307 read at the floor and the other
+52 range from 15 µS/cm up to 2,272, a film of solution still bridging the
+electrodes. **A moisture reading near zero does not mean a sensor is dry or
+clean.** Conductivity is the measurement that notices.
+
+There is a consequence worth stating, because it cuts against a story we were
+tempted by. A sensor a few minutes out of water reads 590 to 641 here, and the same
+sensors after a full day of drying read 583 to 614. Those bands overlap almost
+entirely. **Whatever makes a wetted sensor read high, waiting a day does not
+visibly improve on waiting five minutes**, which is part of why we could not
+demonstrate a drying effect at all.
 
 ### The reading is capped at 10,000 µS/cm
 
