@@ -1,8 +1,8 @@
 # Raw Signal Captures
 
-Forty-two raw IQ captures of WH52 transmissions, recorded on September 9, 2026 at
-915 MHz. Forty-one of them contain a decodable frame; `INVENTORY.csv` lists those
-with their decoded fields and the full payload in hexadecimal.
+Fifty-six raw IQ captures of WH52 transmissions, recorded on September 9 and 10,
+2026 at 915 MHz. Fifty-three of them contain a decodable frame; `INVENTORY.csv`
+lists those with their decoded fields and the full payload in hexadecimal.
 
 These exist for one reason. The conductivity value is a 20-bit number assembled
 from three bytes, and its top four bits are zero below 2,560 µS/cm. Ordinary soil
@@ -27,7 +27,8 @@ Replaying captures without it will republish stale readings to a live broker.
 
 | Condition | Files |
 |---|---|
-| Dry air, after rinsing | 8 |
+| Dry air, hours after rinsing | 8 |
+| Dry air, 24 hours after rinsing | 12 |
 | Tap water with salt, 2,191 to 2,333 µS/cm | 7 |
 | 3,405 to 3,739 µS/cm | 4 |
 | 4,940 to 5,132 µS/cm | 10 |
@@ -35,7 +36,7 @@ Replaying captures without it will republish stale readings to a live broker.
 | Soil, from sensors in service | 8 |
 
 Across the set the moisture reading spans 0 to 98 percent, the raw moisture
-measurement 586 to 1,603, temperature 19.7 to 37.5 °C, and conductivity 4.7 to
+measurement 583 to 1,603, temperature 19.4 to 37.5 °C, and conductivity 4.7 to
 10,008 µS/cm. Eight distinct sensors appear.
 
 **Every carry value the hardware can produce is present.** The four high bits of
@@ -78,10 +79,11 @@ about the numbers warns you, and it is the argument for verifying both.
 
 Conductivity was set with ordinary table salt in tap water and was not
 independently measured; the values in the inventory are the sensors' own readings.
-The dry-air frames were taken from sensors that had been rinsed and towel dried
-shortly before, and they read about 20 to 50 counts higher than the same sensors
-did in air the night before. They should be treated as recently-wet rather than as
-a clean dry reference. Both points are discussed in
+There are two sets of dry-air frames and they are not equivalent. The eight taken
+on September 9 came from sensors rinsed a few hours earlier and read up to 50
+counts high. The twelve taken on September 10 came from the same sensors after a
+day indoors and read 8 to 13 counts high. Neither is a clean never-wetted
+reference; the single `desk_spare` frame in each set is. This is discussed in
 [../../behavior.md](../../behavior.md).
 
 The sensors here were out of the ground during construction work, which is why

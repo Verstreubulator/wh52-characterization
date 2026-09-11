@@ -82,51 +82,47 @@ All three raw values fell.
 This works out to approximately 0.53 counts per degree Celsius, or about one
 percentage point of moisture across a twenty degree swing.
 
-### Rinsed sensors read wet in dry air
+### A wet sensor reads wet in air for about a day, and a little thereafter
 
 After the conductivity work the four sensors were rinsed under hot water, towel dried, and left in
-sunlight. Conductivity returned to the floor, 4.7 to 5.2 µS/cm, so no salt film survives a rinse. The
-moisture readings did not behave as well.
+sunlight. Conductivity returned to the floor, 4.7 to 5.2 µS/cm, so no salt film survives a rinse as far
+as conductivity can tell. The moisture readings did not agree with the same sensors measured in air the
+previous night, before any of them had been wetted.
 
-Three of them had been measured in open air the previous night, which makes a direct comparison
-possible on the same units.
+Reading them again 24 hours later settles it. All values below are normalised to 19.5 °C using the
+0.53 counts per degree established above; the largest correction applied is under two counts.
 
-| Sensor | Air, never rinsed | After rinsing | Shift | Over |
-|---|---|---|---|---|
-| nw | 580 at 19.5 °C | 630 at 37.5 °C | +50 | 18.0 °C |
-| se | 568 at 19.5 °C | 614 at 36.3 °C | +46 | 16.8 °C |
-| sw | 600 at 19.5 °C | 620 at 37.2 °C | +20 | 17.7 °C |
+| Sensor | Air, never wetted | Hours after rinsing | 24 hours later | Offset then | Offset now |
+|---|---|---|---|---|---|
+| nw | 580 | 620 | 588 | +40 | +8 |
+| se | 568 | 605 | 581 | +37 | +13 |
+| sw | 600 | 611 | 612 | +11 | +12 |
 
-Both readings are of air, so water content cannot have changed. Temperature is the only thing that
-should move the raw value, and the coefficient measured above is 0.53 counts per degree. Explaining
-these shifts by temperature alone requires 2.78, 2.74 and 1.13 counts per degree, which is five times
-the measured figure on two of the three units.
+**The control did not move.** An indoor spare that has never been wetted or placed in soil read 586 at
+25.4 °C on the first day and 586 at 25.1 °C on the second. Identical to the count. Repeat frames from
+the same sensor within a few minutes also agree to zero counts, so this measurement is far more
+repeatable than the offsets being discussed.
 
-**Something on the blades is the better explanation.** The rinsed readings of 610 to 630 sit inside the
-band of each unit's fitted zero point, 604 to 635, which is dry soil rather than air. The sensors were
-reporting something closer to damp than to empty.
+Two things follow.
 
-Whether that something is water or residue we cannot say from these readings. Water trapped between the
-blades is the simplest version. A thin deposit left behind by the tap water and the salt is the other,
-and it fits one detail the water explanation does not: conductivity came back to the floor at the same
-time. A dry film has no free ions to conduct, but it still occupies the space the sensor is measuring.
+**Most of the offset was water, and it evaporates.** The two sensors that were furthest out fell from
++40 and +37 counts to +8 and +13. Nothing was done to them except waiting a day indoors.
 
-The two separate cleanly over time. Trapped water evaporates and the readings come back down; a deposit
-stays until it is washed off.
+**A residue of roughly one percentage point remains on all three.** Every rinsed sensor sits 8 to 13
+counts above where it read before it was ever wetted, while the never-wetted control is unchanged. A
+thin deposit left by the tap water and the salt fits this: it does not evaporate, and being dry it
+carries no free ions, which is why conductivity reads a clean floor at the same time.
 
-A fifth unit supports this. An indoor spare that had never been wetted or placed in soil read 586 at
-25.4 °C, which falls in the never-rinsed air band of 564 to 600 rather than with the rinsed units. It
-is a different sensor and so proves nothing on its own, but it is consistent.
+We have not proven it is a deposit. The never-wetted baselines are one reading per sensor, taken from
+units that had just come out of soil, and a deposit was never weighed or photographed. What the data
+establishes is the shape: a large transient offset that clears in a day, and a small one that does not.
 
-We also cannot rule out the temperature coefficient being non-linear, since it was established across
-eight degrees and is here extrapolated across eighteen. Reading the same units again after a day dry
-separates all three explanations at once. Until that is done:
+The practical rule is the same either way. **A sensor that has been wet should not be used as a dry-air
+reference for at least a day, and may hold about a point after that.** This matters for the two-point
+scheme proposed in [interpretation.md](interpretation.md), where the air reading is one of two fixed
+points.
 
-**A sensor that has recently been wet is not a reliable dry-air reference.** This matters for the
-two-point scheme proposed in [interpretation.md](interpretation.md), because the air anchor is one of
-its two fixed points.
-
-### Physical contact matters more than anything else
+### Physical contact matters more than anything else### Physical contact matters more than anything else
 
 One sensor read 7 percent in the dew-damp soil, then 14 percent after being
 pressed in firmly. Nothing else changed. The reading doubled.
@@ -245,8 +241,9 @@ A second session on the afternoon of September 9 recorded raw IQ captures at con
 conductivities, specifically to test the parts of the conductivity decode that ordinary readings never
 reach. Conductivity was raised from tap water with table salt in four stages while all four back lawn
 sensors sat in the same cup, and a fifth condition was captured afterwards with the sensors rinsed and
-dry. Forty-two capture files were kept, of which forty-one decode. They are in
-[data/captures/](data/captures/) with their decodes in `INVENTORY.csv`.
+dry. Fifty-six capture files were kept, of which fifty-three decode. They are in
+[data/captures/](data/captures/) with their decodes in `INVENTORY.csv`. Twelve of them are the
+dry-air follow-up described above.
 
 The conductivity value is a 20-bit number assembled from three bytes, and the top four bits live in the
 same byte as part of the moisture measurement. Those top bits are zero below 2,560 µS/cm, which is above
@@ -255,14 +252,14 @@ there would be invisible.
 
 | Range indicator | Carry bits | Frames | Conductivity |
 |---|---|---|---|
-| 1 | 0 | 16 | 5 µS/cm |
+| 1 | 0 | 28 | 5 µS/cm |
 | 4 | 0 | 7 | 2,191 – 2,333 |
 | 5 | **1** | 4 | 3,405 – 3,739 |
 | 7 | **1** | 8 | 4,940 – 5,112 |
 | 7 | **2** | 2 | 5,122 – 5,132 |
 | 13 | **3** | 4 | 10,002 – 10,008 |
 
-Moisture across the set spans 0 % to 98 %, and the raw moisture measurement 586 to 1,603, so the whole
+Moisture across the set spans 0 % to 98 %, and the raw moisture measurement 583 to 1,603, so the whole
 of the reported scale is represented.
 
 ### The carry boundary, located to 11 µS/cm

@@ -80,14 +80,16 @@ calibrating each one.
 We have not verified this against a gravimetric soil sample, which is the
 measurement that would settle it.
 
-There is also a practical difficulty with the air anchor. The same three sensors,
-measured in air before and after being rinsed, read 20 to 50 counts higher
-afterwards. That is up to five percentage points of moisture, which is larger than
-the difference between units the scheme exists to remove, and temperature accounts
-for only a fifth of it.
+There is also a practical difficulty with the air anchor. Sensors read high in air
+after being wetted: up to 50 counts immediately, falling to 8 to 13 counts after a
+day. A never-wetted control held its reading exactly across the same period, so the
+effect is in the sensors that were wet, not in the measurement.
 
-So the air reading has to be taken on a sensor that is genuinely dry, and we cannot
-yet say how long after a wetting that is. This is described in
+The transient part is large enough to ruin the anchor and clears on its own. The
+residual part is about one percentage point and appears not to clear, which puts a
+floor on how well this scheme can work for a probe that has been in service. Take
+the air reading on a sensor that has been dry for at least a day, and expect a
+point of error if it has ever been wet. This is described in
 [behavior.md](behavior.md).
 
 ## The range indicator appears to switch on uncompensated conductance

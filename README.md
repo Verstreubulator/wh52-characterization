@@ -81,6 +81,11 @@ limit of the data field, which has unused headroom.
 probe read 7 percent and then 14 percent in the same soil, before and after being
 pressed in firmly.
 
+**A sensor that has been wet keeps reading wet in air.** Up to five percentage
+points immediately after a rinse, falling to about one point after a day, while a
+never-wetted control held its reading exactly. Most of it is water and clears on
+its own; a small part appears not to.
+
 ## A note on confidence
 
 We are not soil scientists and we do not have laboratory equipment. Conductivity
