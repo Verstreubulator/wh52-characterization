@@ -65,14 +65,17 @@ We measured reported moisture falling as conductivity rose and stated that salin
 soil would therefore read drier than it is, pushing an irrigation controller
 toward over-watering.
 
-The published literature reports the opposite for capacitance sensors in soil:
-water content is over-estimated in saline conditions, sometimes substantially,
-because ionic conduction adds to the apparent permittivity (Skierucha & Wilczek,
-2012).
+The measurement did not support it. It was taken with the sensors submerged in
+water, which is not the situation the claim was about. A submerged sensor is
+already at the top of its permittivity range, so added conductivity damps the
+reading; in partly wet soil the same ions would add to apparent permittivity
+instead, which is the opposite sign. We had measured one case and made a
+statement about the other.
 
-Our measurements were taken with sensors submerged in water, which is not the
-same situation. A submerged sensor is already at the top of its permittivity
-range, and added conductivity damps the measurement instead of adding to it.
+A later version of this entry said the published literature reports the opposite
+direction in soil, citing Skierucha and Wilczek. We have only read that paper's
+abstract and could not confirm it, so that attribution has been removed too. The
+withdrawal stands on its own: we measured in water and spoke about soil.
 
 We do not know which direction applies in soil, and should not have said we did.
 What survives is that the effect was too small to measure anywhere near the

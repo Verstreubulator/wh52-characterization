@@ -250,6 +250,10 @@ BANNED = [
      "the July calibration spanned 340 to 7,430 uS/cm, which is ranges 1 to 8"),
     ("only ever validated in ordinary soil",
      "the July calibration spanned 340 to 7,430 uS/cm, which is ranges 1 to 8"),
+    ("reporting residuals of 3 to 5 percent",
+     "not confirmable from the abstract we have"),
+    ("water content is over-estimated in saline conditions",
+     "not confirmable from the abstract we have"),
     ("Flame-retardant epoxy resin",
      "that is the module's sealing compound; its probe is an alloy electrode"),
 ]

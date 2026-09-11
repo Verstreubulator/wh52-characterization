@@ -1,10 +1,9 @@
 # Reading the Raw Fields
 
-Every number in this document comes from fields that no released software
-reports. The production decoder in rtl_433 emits moisture, temperature,
-conductivity and battery voltage, which is what most people want, but it does not
-emit the raw moisture measurement or the conductivity range indicator. This
-section explains how to read them.
+The production decoder in rtl_433 emits moisture, temperature, conductivity and
+battery voltage, which is what most people want. It does not emit the raw moisture
+measurement or the conductivity range indicator, and much of the analysis in this
+repository rests on those two. This section explains how to read them.
 
 ## Attribution
 

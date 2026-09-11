@@ -37,8 +37,17 @@ used in [interpretation.md](interpretation.md). Fitted for mineral soils.
 Skierucha, W., & Wilczek, A. (2012). A FDR sensor for measuring complex soil
 dielectric permittivity in the 10–500 MHz frequency range. *Sensors, 12*(8),
 10890–10905. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3472864/
-Reports water content over-estimation from salinity in FDR sensors, and a
-correction method using measured conductivity as the indicator of dielectric loss.
+Cited for the approach of determining bulk electrical conductivity from the
+imaginary part of the complex permittivity, which its abstract describes as done
+"without disregarding the dielectric losses". **We have only read the abstract.**
+An earlier version of this file credited it with a specific direction and specific
+residual figures for the salinity effect; we could not confirm either from the
+text available to us, and have removed both.
+
+The three below were read while trying to work out whether salinity should change
+how we read moisture. **No claim in this repository rests on any of them**, and we
+have not gone back to verify their contents against anything we wrote. They are
+listed so that someone following the same question has the same starting points.
 
 Kizito, F., et al. *Response of the TEROS 12 soil moisture sensor under different
 soils and variable electrical conductivity*.

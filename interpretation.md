@@ -195,22 +195,25 @@ drifting, but we have not measured any physical dimension to check it.
 Our measurements found no detectable effect below about 300 µS/cm, and the soil in
 our sweep read between 5 and 137.
 
-We would not go further than that. The measurements were made in water, and the
-published literature reports the effect running the other way in soil, with
-capacitance sensors reading high rather than low in saline conditions (Skierucha
-& Wilczek, 2012). Water and soil are not equivalent here: a submerged sensor is
-already at the top of its permittivity range, whereas in partly wet soil the same
-ions add to apparent permittivity. **We do not know which direction applies in our
-beds**, and we withdrew an earlier claim that we did. See [errata.md](errata.md).
+We would not go further than that. Our measurements were made in water, and water
+and soil are not equivalent here: a submerged sensor is already at the top of its
+permittivity range, whereas in partly wet soil the same ions add to apparent
+permittivity. There is a literature on how salinity affects FDR sensors in soil,
+and it is the reason we stopped trusting our own result, but we have not been able
+to read the full text of the paper we cite and will not put a direction in its
+mouth. **We do not know which direction applies in our beds**, and we withdrew an
+earlier claim that we did. See [errata.md](errata.md).
 
 What survives is the magnitude. Whatever the sign, we could not measure it where
 our soil operates, and it is smaller than the error introduced by how firmly the
 sensor is pushed into the ground.
 
-If a correction is ever wanted, the published approach uses the measured
-conductivity as an indicator of dielectric loss and corrects the water content
-from both together, reporting residuals of 3 to 5 percent. It should be fitted in
-soil rather than in water.
+If a correction is ever wanted, the approach in the literature is to treat the
+measured conductivity as an indicator of dielectric loss and correct water content
+from both together (Skierucha & Wilczek, 2012, whose abstract describes determining
+bulk electrical conductivity from the imaginary part of the complex permittivity
+"without disregarding the dielectric losses"). Whatever is fitted should be fitted
+in soil rather than in water.
 
 ## An observation we cannot explain
 
