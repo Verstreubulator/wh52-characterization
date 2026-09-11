@@ -20,21 +20,29 @@ following.
 
 | Sensor | Permittivity at reported 0 percent | at reported 100 percent |
 |---|---|---|
-| ne | 4.14 | 76.7 |
-| nw | 3.41 | 79.9 |
-| se | 3.67 | 74.3 |
-| sw | 3.32 | 68.5 |
-
-All four land between 3.3 and 4.1 at their zero point, which is the published range
-for dry mineral soil. That value was not fitted; the line was drawn through air and
-water only, and dry soil is where the sensors' own zero happens to fall.
+| ne | 1.89 | 78.5 |
+| nw | 1.72 | 74.0 |
+| se | 1.73 | 74.3 |
+| sw | 1.73 | 73.3 |
 
 The 100 percent point lands near the permittivity of water, not of saturated soil.
-Saturated soil is generally between 30 and 40.
+Saturated soil is generally between 30 and 40, and none of these are close to it.
 
-**This suggests the reported percentage is a linear scale from dry soil to water.**
-If so, 100 percent does not represent field capacity or even saturation, and should
-not be treated as either.
+The zero point lands just above air. Dry mineral soil is 2.5 to 4, and all four
+sensors put their reported zero below that. Expressed on each sensor's own scale,
+air falls at −5.0, −4.2, −4.3 and −4.4 percent, which is then clamped to zero. The
+four agree to better than a point, which is more consistent than most things we
+have measured.
+
+**So the reported percentage is a linear scale from a little above air to water.**
+Neither end is a soil condition. One hundred percent is not field capacity and not
+saturation. Zero percent is not dry soil either; dry soil reads a few percent, and
+our own dew-damp soil read 8 to 14.
+
+An earlier version of this document put the zero point at a permittivity of 3.3 to
+4.1 and called that dry mineral soil, treating the coincidence as the strongest
+evidence for the model below. That was arithmetic error rather than interpretation,
+and it is described in [errata.md](errata.md).
 
 ### The relationship is with the square root of permittivity, not permittivity
 
@@ -57,13 +65,17 @@ Repeating the calculation on that basis gives the following.
 | Saturated soil | 24.7 to 38.1 | 39.7 to 49.9 | 56 to 63 |
 
 Dry mineral soil is generally 2 to 8 percent water content by volume, field
-capacity 25 to 35 percent, and saturation 40 to 50 percent. Every level now falls
+capacity 25 to 35 percent, and saturation 40 to 50 percent. Every level falls
 where soil physics says it should, using two anchors that were never fitted to
 soil.
 
 **We take this as evidence that the raw value is linear in the square root of
 permittivity.** The reasoning is circumstantial: it rests on the resulting numbers
 being physically sensible rather than on any direct measurement of permittivity.
+It is also weaker than it was, because the zero-point coincidence we used to cite
+alongside it turned out to be an arithmetic mistake. What survives is the soil
+column above, and the fact that the linear-permittivity alternative fails badly on
+the same data.
 
 The dew-damp result is still perhaps one to three points higher than the soil
 warranted, and Topp's equation is fitted for mineral soils and is known to read
@@ -80,17 +92,27 @@ calibrating each one.
 We have not verified this against a gravimetric soil sample, which is the
 measurement that would settle it.
 
-There is also a practical difficulty with the air anchor. Sensors read high in air
-after being wetted: up to 50 counts immediately, falling to 8 to 13 counts after a
-day. A never-wetted control held its reading exactly across the same period, so the
-effect is in the sensors that were wet, not in the measurement.
+There is a serious practical difficulty with the air anchor, and it is worse than
+the one we first described.
 
-The transient part is large enough to ruin the anchor and clears on its own. The
-residual part is about one percentage point and appears not to clear, which puts a
-floor on how well this scheme can work for a probe that has been in service. Take
-the air reading on a sensor that has been dry for at least a day, and expect a
-point of error if it has ever been wet. This is described in
-[behavior.md](behavior.md).
+The air reading is not reproducible. Carrying the same sensors from one room to
+another, with nothing else changed, moved two of them by 19 and 21 counts, which is
+about two percentage points. Within a single session the same sensors repeat to
+within one count, so the instrument is fine; what changes is what is near it. In
+air, the sensing volume contains whatever the sensor is resting on and whatever is
+beside it.
+
+Two percentage points is the same order as the spread between units that this
+scheme exists to remove. **Unless the air reading is taken in a fixed arrangement,
+clear of surfaces and of other sensors, and returned to that arrangement every
+time, the anchor is not accurate enough to be worth having.**
+
+The water anchor is probably safer, since a submerged sensor is surrounded by water
+rather than by its surroundings, but we have not tested that either.
+
+We also cannot say how long a wetted sensor reads high, or by how much. Our sessions
+differed in placement as well as in elapsed time, so the two cannot be separated
+from the data we have. See [errata.md](errata.md).
 
 ## The range indicator appears to switch on uncompensated conductance
 

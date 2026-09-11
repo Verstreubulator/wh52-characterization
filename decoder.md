@@ -80,7 +80,7 @@ error when read cold, and it is not.
 
 ## Checking a frame
 
-Both check bytes should be verified. We recorded one frame in 522 that passed the
+Both check bytes should be verified. We recorded one frame in 671 that passed the
 sum check while decoding to a temperature of 89 °C and a range indicator that
 could not be valid. The CRC would have rejected it.
 

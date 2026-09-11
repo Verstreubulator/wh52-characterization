@@ -35,19 +35,27 @@ The sensors transmit both a raw measurement and a percentage. Fitting the raw
 value against the reported percentage for each unit across the full sweep gives
 four different straight lines.
 
-| Sensor | Counts per 1 percent | Raw at 0 percent | Raw at 100 percent | Largest residual |
-|---|---|---|---|---|
-| ne | 10.39 | 617 | 1655 | 0.38 points |
-| nw | 10.16 | 612 | 1628 | 0.36 points |
-| se | 10.05 | 604 | 1608 | 0.44 points |
-| sw | 9.82 | 635 | 1617 | 0.09 points |
+| Sensor | Points | Counts per 1 percent | Raw at 0 percent | Raw at 100 percent | Largest residual |
+|---|---|---|---|---|---|
+| ne | 37 | 10.37 | 624 | 1661 | 0.52 points |
+| nw | 28 | 10.14 | 618 | 1633 | 0.46 points |
+| se | 32 | 10.06 | 607 | 1613 | 0.51 points |
+| sw | 38 | 9.86 | 640 | 1625 | 0.53 points |
+
+The fit uses every unclamped frame in
+[data/moisture-frames-20260909.csv](data/moisture-frames-20260909.csv), the settled values in
+[data/moisture-sweep-20260909.csv](data/moisture-sweep-20260909.csv), and one point per sensor recovered
+from the July captures that were contributed to `rtl_433_tests`. Clamped readings, meaning anything at 0
+or 100 percent, are excluded because the raw value keeps moving there while the percentage does not.
+Those July points were taken two months earlier and land on the same lines, which is worth more than the
+residuals: the conversion is a stable property of each unit rather than a state it was in that morning.
 
 Each line is straight to better than half a percentage point across a span of 0 to
 96 percent, which is the limit of what the sensor's whole-number output can
 resolve. There is no curvature to be found.
 
-The differences between units are larger than the fit error. Slopes differ by 5.5
-percent and zero points by 31 counts, which is about three percentage points of
+The differences between units are larger than the fit error. Slopes differ by 5.2
+percent and zero points by 33 counts, which is about three percentage points of
 moisture. Two sensors sitting four counts apart in the same soil reported readings
 three percentage points apart, and did so again two hundred counts higher up the
 scale.
@@ -64,7 +72,7 @@ percent point. The raw value continues to rise after the percentage has stopped.
 
 One frame captured a sensor mid-immersion reading 96 percent at a raw value of
 1593, which is an unclamped reading near the top of the range. Its fitted line
-predicts 96.6 percent. A second sensor produced a similar reading later the same
+predicts 96.2 percent. A second sensor produced a similar reading later the same
 morning at 1585, also reporting 96 percent.
 
 ### Temperature affects the raw value
@@ -82,47 +90,58 @@ All three raw values fell.
 This works out to approximately 0.53 counts per degree Celsius, or about one
 percentage point of moisture across a twenty degree swing.
 
-### A wet sensor reads wet in air for about a day, and a little thereafter
+### The air reading is not a stable reference
 
-After the conductivity work the four sensors were rinsed under hot water, towel dried, and left in
-sunlight. Conductivity returned to the floor, 4.7 to 5.2 µS/cm, so no salt film survives a rinse as far
-as conductivity can tell. The moisture readings did not agree with the same sensors measured in air the
-previous night, before any of them had been wetted.
+This started as a question about whether a rinsed sensor reads wet. It ended somewhere more useful, which
+is that a reading taken in air is not reproducible enough to serve as a reference point at all.
 
-Reading them again 24 hours later settles it. All values below are normalised to 19.5 °C using the
-0.53 counts per degree established above; the largest correction applied is under two counts.
+Four sessions, same sensors, all normalised to 19.5 °C using the 0.53 counts per degree established above.
 
-| Sensor | Air, never wetted | Hours after rinsing | 24 hours later | Offset then | Offset now |
-|---|---|---|---|---|---|
-| nw | 580 | 620 | 588 | +40 | +8 |
-| se | 568 | 605 | 581 | +37 | +13 |
-| sw | 600 | 611 | 612 | +11 | +12 |
+| Sensor | Never wetted | Hours after a rinse | One day later | 15 minutes after that |
+|---|---|---|---|---|
+| nw | 580 | 620 | 588 | 586 |
+| se | 568 | 605 | 581 | 563 |
+| sw | 600 | 611 | 612 | 591 |
+| spare, never wetted | — | 583 | 583 | 588 |
 
-**The control did not move.** An indoor spare that has never been wetted or placed in soil read 586 at
-25.4 °C on the first day and 586 at 25.1 °C on the second. Identical to the count. Repeat frames from
-the same sensor within a few minutes also agree to zero counts, so this measurement is far more
-repeatable than the offsets being discussed.
+The last two columns are fifteen minutes apart. Both are a full day after the rinse, so nothing was
+drying. The only thing that happened in between is that the sensors were picked up and carried to a
+different place.
 
-Two things follow.
+**Two of them moved by 19 and 21 counts.** That is about two percentage points, and it is larger than
+anything we had attributed to residue. Both now sit *below* their own never-wetted readings. The spare,
+which nobody touched, moved 5 counts.
 
-**Most of the offset was water, and it evaporates.** The two sensors that were furthest out fell from
-+40 and +37 counts to +8 and +13. Nothing was done to them except waiting a day indoors.
+Within a single session the same sensor is almost perfectly repeatable: four frames from `se` minutes
+apart read 565, 566, 566, 566. So this is not noise in the measurement. It is the measurement correctly
+reporting that its surroundings changed.
 
-**A residue of roughly one percentage point remains on all three.** Every rinsed sensor sits 8 to 13
-counts above where it read before it was ever wetted, while the never-wetted control is unchanged. A
-thin deposit left by the tap water and the salt fits this: it does not evaporate, and being dry it
-carries no free ions, which is why conductivity reads a clean floor at the same time.
+That should have been obvious in advance. The sensor measures the permittivity of whatever is in its
+sensing volume, and in air that includes the bench it is lying on, its own packaging, the other three
+sensors next to it, and a hand that was recently holding it. "In air" is not one condition.
 
-We have not proven it is a deposit. The never-wetted baselines are one reading per sensor, taken from
-units that had just come out of soil, and a deposit was never weighed or photographed. What the data
-establishes is the shape: a large transient offset that clears in a day, and a small one that does not.
+### What this does and does not establish
 
-The practical rule is the same either way. **A sensor that has been wet should not be used as a dry-air
-reference for at least a day, and may hold about a point after that.** This matters for the two-point
-scheme proposed in [interpretation.md](interpretation.md), where the air reading is one of two fixed
-points.
+**Withdrawn: the one-point residue.** We reported that rinsed sensors held about 8 to 13 counts above
+their never-wetted readings after a day, and that a deposit explained it. Relocation alone produces
+changes of the same size or larger, and after relocation two of the three read below their baselines
+instead of above. The residue was not measured; it was inferred from a difference that placement can
+produce on its own.
 
-### Physical contact matters more than anything else### Physical contact matters more than anything else
+**Still standing, with less precision than we claimed.** The offset within hours of a rinse was 40, 37
+and 11 counts, and the largest placement change we have seen is 21. So a wet sensor probably does read
+high. We can no longer put a number on how high or say how long it lasts, because the sessions differ in
+placement as well as in time.
+
+**New, and the practical result:** an air reading is worth about ±20 counts, or two percentage points,
+unless the physical arrangement is controlled and repeated. That is comparable to the spread between
+units, which is the thing a two-anchor calibration exists to remove. This is discussed in
+[interpretation.md](interpretation.md).
+
+To do better, the sensors would have to be read in a fixed jig, clear of surfaces and of each other, and
+returned to it each time. We have not built that.
+
+### Physical contact matters more than anything else### Physical contact matters more than anything else### Physical contact matters more than anything else
 
 One sensor read 7 percent in the dew-damp soil, then 14 percent after being
 pressed in firmly. Nothing else changed. The reading doubled.
@@ -241,9 +260,9 @@ A second session on the afternoon of September 9 recorded raw IQ captures at con
 conductivities, specifically to test the parts of the conductivity decode that ordinary readings never
 reach. Conductivity was raised from tap water with table salt in four stages while all four back lawn
 sensors sat in the same cup, and a fifth condition was captured afterwards with the sensors rinsed and
-dry. Fifty-six capture files were kept, of which fifty-three decode. They are in
-[data/captures/](data/captures/) with their decodes in `INVENTORY.csv`. Twelve of them are the
-dry-air follow-up described above.
+dry. Seventy-four capture files were kept, of which seventy-two contain at least one frame passing both check
+bytes. They are in [data/captures/](data/captures/) with their decodes in `INVENTORY.csv`. Thirty of them
+are the dry-air work described above.
 
 The conductivity value is a 20-bit number assembled from three bytes, and the top four bits live in the
 same byte as part of the moisture measurement. Those top bits are zero below 2,560 µS/cm, which is above
@@ -252,14 +271,14 @@ there would be invisible.
 
 | Range indicator | Carry bits | Frames | Conductivity |
 |---|---|---|---|
-| 1 | 0 | 28 | 5 µS/cm |
+| 1 | 0 | 49 | 5 µS/cm |
 | 4 | 0 | 7 | 2,191 – 2,333 |
 | 5 | **1** | 4 | 3,405 – 3,739 |
 | 7 | **1** | 8 | 4,940 – 5,112 |
 | 7 | **2** | 2 | 5,122 – 5,132 |
 | 13 | **3** | 4 | 10,002 – 10,008 |
 
-Moisture across the set spans 0 % to 98 %, and the raw moisture measurement 583 to 1,603, so the whole
+Moisture across the set spans 0 % to 98 %, and the raw moisture measurement 565 to 1,603, so the whole
 of the reported scale is represented.
 
 ### The carry boundary, located to 11 µS/cm
@@ -294,6 +313,12 @@ and the highest count we ever recorded is 256,197 — short by 5,947.
 that exists rather than merely a good sample of them.
 
 ## Radio behavior
+
+**Each reading is sent twice, 43 milliseconds apart.** Every raw capture that contains a decodable frame
+contains it twice, with an identical payload. Measured across 25 pairs the interval is 43.2 to 43.4
+milliseconds, which is tight enough to be a fixed firmware delay rather than anything adaptive. Neither
+copy carries a flag distinguishing it from the other, so a receiver sees the same reading arrive twice
+and should expect that.
 
 The sensors transmit approximately every 70 seconds when readings are stable, and
 approximately every 10 seconds while a reading is changing. The return to the

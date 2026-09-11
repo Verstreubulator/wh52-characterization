@@ -126,6 +126,52 @@ that before the data showed it.
 What survives is a rule rather than an anchor: a sensor that has been wet is not a
 dry-air reference for at least a day, and may hold about a point after that.
 
+## The zero point was said to land on dry soil, and the arithmetic did not say that
+
+Converting each sensor's fitted zero point to a permittivity, using air and water
+as the two anchors, we reported values of 3.3 to 4.1 and observed that this is the
+textbook range for dry mineral soil. Because the anchors were never fitted to soil,
+we treated the coincidence as the strongest single piece of evidence that the raw
+value tracks the square root of permittivity.
+
+Recomputing it from the published data gives 1.7 to 1.9. The correct figure sits
+just above air and well below dry soil, and the conclusion drawn from it does not
+follow.
+
+The error is not in the method or in the anchors. Applying the same calculation to
+the soil levels reproduces the published table to within a few tenths, so the
+machinery was right. The zero-point column corresponds to raw values around 690 to
+715, which is 70 to 100 counts above the fitted zero point, or roughly 7 to 10
+percent up the scale. We cannot reconstruct where those numbers came from.
+
+What makes this worth recording is that the claim was checkable against data in
+this repository the whole time, and nobody checked it, including us, until an audit
+of the whole repository went looking. A number that agrees with a textbook is the
+one most worth recomputing, not the least.
+
+## A residue was inferred from a difference that placement can produce
+
+Having withdrawn the dry-air anchor above, we replaced it with a second claim: that
+most of the offset was water which evaporated in a day, and that a residual 8 to 13
+counts, about one percentage point, was a deposit left by the tap water and salt.
+The owner had suggested a deposit, the number was stable across three sensors, and
+a never-wetted control appeared not to move at all.
+
+Reading the same sensors again fifteen minutes later, after they had been carried
+to a different place, moved two of them by 19 and 21 counts. Both then read below
+their never-wetted baselines rather than above. The control moved 5 counts without
+being touched.
+
+The residual was the same size as the measurement's dependence on where the sensor
+is sitting. We had three sessions and treated the difference between them as
+time, when placement differed too.
+
+This is the same error as the battery byte and the moisture formula, in a third
+costume: a difference that could have had more than one cause was assigned to the
+cause we were interested in. The control was supposed to guard against exactly
+that, and it did not, because it was in a different place from the sensors it was
+controlling for.
+
 ## Capture files were lost between listing them and fetching them
 
 The radio node writes one raw capture per detected signal and keeps only about a hundred, so the pool

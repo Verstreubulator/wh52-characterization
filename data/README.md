@@ -55,6 +55,31 @@ One value is absent. The sensor `back_lawn_se` produced no raw frame at the
 ordinary-soil level, because the radio saving the raw captures hears that
 particular unit poorly. Its percentage is recorded and its raw value is not.
 
+## moisture-frames-20260909.csv
+
+338 individual frames from the four back lawn sensors between 07:15 and 09:14 on
+September 9, covering the second half of the moisture sweep. Unlike the file above,
+which records one settled value per sensor per level, this is every frame the radio
+decoded in that window.
+
+It exists because the per-sensor conversion table in
+[../behavior.md](../behavior.md) could not be reproduced from the settled values
+alone; six points per sensor is not enough to pin a line down, and the published
+table had been computed from a larger set that was never included here. These are
+those frames. With them the fit reproduces.
+
+Two warnings. This came from the filtered logger described below, so it is not
+usable for anything concerning byte 11. And the sweep was still in progress, so
+consecutive frames from one sensor are not independent samples of a fixed
+condition; they are a sensor tracking soil that was being watered.
+
+| Column | Meaning |
+|---|---|
+| time | Local time, Pacific |
+| probe | Which sensor |
+| moisture_pct, m_raw | As reported, and the raw measurement |
+| temp_C, ec_uS_cm | As reported |
+
 ## conductivity-series-20260909.csv
 
 1,016 frames recorded between 07:15 and 10:29 while conductivity was raised from

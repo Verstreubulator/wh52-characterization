@@ -55,10 +55,10 @@ points spanning 604 to 635. In a single stirred solution the same four units
 reported conductivity values 11 percent apart. Readings from different units are
 not directly comparable without accounting for this.
 
-**The moisture scale runs from dry soil to water, not to saturated soil.** Our
-data suggests the reported 0 percent corresponds to a dielectric permittivity of
-roughly 3.5, which is dry mineral soil, and 100 percent to roughly 75, which is
-water. Field capacity falls well below the top of the scale.
+**Neither end of the moisture scale is a soil condition.** Our data suggests 100
+percent corresponds to a dielectric permittivity of roughly 75, which is water, and
+0 percent to roughly 1.8, which is a little above air. Dry soil reads a few
+percent, not zero, and field capacity falls well below the top of the scale.
 
 **Conductivity measurement is auto-ranging.** The sensor moves through at least
 ten gain ranges as conductivity rises, and reports which one it is using. The
@@ -81,10 +81,12 @@ limit of the data field, which has unused headroom.
 probe read 7 percent and then 14 percent in the same soil, before and after being
 pressed in firmly.
 
-**A sensor that has been wet keeps reading wet in air.** Up to five percentage
-points immediately after a rinse, falling to about one point after a day, while a
-never-wetted control held its reading exactly. Most of it is water and clears on
-its own; a small part appears not to.
+**A reading taken in air is not a stable reference.** Carrying the same sensors to
+a different room moved two of them by about two percentage points, while within a
+session they repeat to within one count. In air the sensing volume includes the
+bench, the packaging and the neighbouring sensors. A sensor freshly out of water
+does read high, but we cannot say by how much or for how long, because our sessions
+differed in placement as well as in time.
 
 ## A note on confidence
 
