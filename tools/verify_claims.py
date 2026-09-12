@@ -100,8 +100,10 @@ check("every row matches its own payload", bad == 0 and crc_fail == 0,
 check("all eight sensors appear", len({r["device_id"] for r in captures}) == 8)
 check("every carry value 0 to 3 is present",
       sorted({int(r["carry_nibble"]) for r in captures}) == [0, 1, 2, 3])
-counts = [round(float(r["ec_uS_cm"]) * 25.6) for r in captures]
-check("highest conductivity count is 256,197", max(counts) == 256197, f"{max(counts):,}")
+counts = [((bytes.fromhex(r["payload"])[8] & 0x0F) << 16)
+          | (bytes.fromhex(r["payload"])[9] << 8)
+          | bytes.fromhex(r["payload"])[10] for r in captures]
+check("highest conductivity count is 256,198", max(counts) == 256198, f"{max(counts):,}")
 check("a carry of 4 is out of reach", 262144 > max(counts),
       f"would need 262,144; the ceiling stops us {262144 - max(counts):,} short")
 
@@ -255,11 +257,70 @@ check("byte 18 is 0x7b on seven units and 0x8c on one",
 batch = {(d[:3], sorted(v)[0]) for d, v in per_unit[21].items()}
 check("byte 21 follows the identifier prefix", batch == {("005", 0x08), ("007", 0x09)})
 
+print("\nRange-indicator transitions, and what the counts depend on")
+# The patch comment quotes "100 of the 101 range changes". That figure excludes one
+# frame, and the exclusion has to be stated or the number cannot be reproduced.
+def transitions(frames):
+    by_probe = defaultdict(list)
+    for r in frames:
+        by_probe[r["probe"]].append(r)
+    total = same = 0
+    exceptions = []
+    for fs in by_probe.values():
+        fs.sort(key=lambda r: r["time"])
+        for a, b in zip(fs, fs[1:]):
+            ra, rb = int(a["byte11"], 16) >> 4, int(b["byte11"], 16) >> 4
+            if ra == rb:
+                continue
+            total += 1
+            if (rb - ra) * (float(b["ec_uS_cm"]) - float(a["ec_uS_cm"])) > 0:
+                same += 1
+            else:
+                exceptions.append((a["probe"], a["time"], ra, b["time"], rb))
+    return total, same, exceptions
+
+
+odd = [r for r in series if int(r["byte11"], 16) & 0x0F != 6]
+check("exactly one series frame fails the byte 11 low-nibble sanity check", len(odd) == 1,
+      f"{odd[0]['probe']} {odd[0]['time']}, byte11 {odd[0]['byte11']}, {odd[0]['temp_C']} C"
+      if len(odd) == 1 else f"{len(odd)} frames")
+check("and it is not a physical reading", len(odd) == 1 and float(odd[0]["temp_C"]) > 80,
+      f"{odd[0]['temp_C']} C on an indoor probe" if len(odd) == 1 else "")
+
+clean = [r for r in series if int(r["byte11"], 16) & 0x0F == 6]
+tot_c, same_c, exc_c = transitions(clean)
+check("excluding it: 100 of 101 transitions move with the reported value",
+      (same_c, tot_c) == (100, 101), f"{same_c} of {tot_c}")
+tot_a, same_a, _ = transitions(series)
+check("including it: 102 of 103, which is why the exclusion must be stated",
+      (same_a, tot_a) == (102, 103), f"{same_a} of {tot_a}")
+check("the single exception is the fall from 13 to 12 at the ceiling",
+      len(exc_c) == 1 and (exc_c[0][2], exc_c[0][4]) == (13, 12),
+      f"{exc_c[0]}" if len(exc_c) == 1 else f"{len(exc_c)} exceptions")
+check("byte 11 low nibble is 0x6 in every CRC-checked capture",
+      all(bytes.fromhex(r["payload"])[11] & 0x0F == 6 for r in captures),
+      f"{len(captures)} readings")
+
+print("\nThe moisture frames are part of the conductivity series, not an addition to it")
+mois_rows = load("moisture-frames-20260909.csv")
+mois_distinct = {(r["time"], r["probe"], r["m_raw"], r["ec_uS_cm"]) for r in mois_rows}
+check("moisture-frames holds 338 rows but 327 distinct transmissions",
+      (len(mois_rows), len(mois_distinct)) == (338, 327),
+      f"{len(mois_rows)} rows, {len(mois_distinct)} distinct")
+check("every one of them also appears in the conductivity series",
+      mois_distinct <= {(r["time"], r["probe"], r["m_raw"], r["ec_uS_cm"]) for r in series_rows},
+      "so the two counts must never be added together")
+
+print("\nThe conductivity ceiling is approximate")
+top = sorted({float(r["ec_uS_cm"]) for r in series if float(r["ec_uS_cm"]) >= 10000})
+check("readings at the ceiling sit above 10,000 rather than exactly on it",
+      bool(top) and 10000 < top[0] and top[-1] < 10010, f"{top[0]} to {top[-1]} uS/cm")
+
 print("\nDocument text (phrases that must not reappear)")
 DOCS = {name: open(name, encoding="utf-8").read()
         for name in ("README.md", "behavior.md", "interpretation.md", "decoder.md",
-                     "hardware.md", "errata.md", "sources.md")}
-CORRECTIONS = DOCS["errata.md"]
+                     "hardware.md", "errata.md", "sources.md",
+                     "data/README.md", "data/captures/README.md")}
 BANNED = [
     ("8 to 12 to 13", "range 8 is at 6,040, not at the ceiling"),
     ("0.53 counts per degree", "no temperature coefficient is measurable"),
@@ -304,11 +365,25 @@ BANNED = [
     ("Flame-retardant epoxy resin",
      "that is the module's sealing compound; its probe is an alloy electrode"),
 ]
+# A phrase may legitimately appear in a sentence that withdraws it. Those sentences
+# are exempt; a bare restatement anywhere else is not. errata.md is exempt as a file,
+# but its contents no longer switch the check off for every other file, which is what
+# the earlier version did: three phrases, including the withdrawn temperature
+# coefficient and the withdrawn permittivity range, were never being enforced at all.
+CORRECTION_MARKERS = ("An earlier version", "earlier version of this file",
+                      "which is wrong", "was wrong", "we withdrew", "had to withdraw")
+
+
+def asserted_in(text, phrase):
+    return [line for line in text.splitlines()
+            if phrase in line and not any(m in line for m in CORRECTION_MARKERS)]
+
+
 for phrase, why in BANNED:
-    where = [n for n, t in DOCS.items() if phrase in t and phrase not in CORRECTIONS]
-    outside_errata = [n for n in where if n != "errata.md"]
-    check(f'withdrawn wording absent: "{phrase}"', not outside_errata,
-          f"found in {outside_errata} ({why})" if outside_errata else why)
+    where = [n for n, t in DOCS.items()
+             if n != "errata.md" and asserted_in(t, phrase)]
+    check(f'withdrawn wording absent: "{phrase}"', not where,
+          f"found in {where} ({why})" if where else why)
 
 print()
 if FAILED:

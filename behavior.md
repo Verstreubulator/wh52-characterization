@@ -309,6 +309,18 @@ Range 1 counts 451 transmissions, but 334 of those come from a capture program
 that discarded frames where the indicator was not 1. See [data/](data/) for why
 that portion of the record is not evidence of anything.
 
+**The indicator moves with the reported conductivity, in all but one step.**
+Taking the 798 distinct transmissions in order per sensor, the indicator changes
+101 times, and in 100 of those it moves in the same direction as the reported
+conductivity. The one exception is the ceiling frame described below.
+
+That count excludes one frame, and the exclusion matters enough to state. The
+series was logged with checksum validation only, and one frame in it decodes to
+89.4 °C on the indoor spare probe with byte 11's low nibble at 0xc rather than the
+0x6 it carries everywhere else, including in all 77 CRC-checked capture readings.
+Keeping it gives 102 changes of 103, because it invents two transitions of its own.
+`tools/verify_claims.py` recomputes both figures.
+
 **The indicator continues to change after the conductivity reading has stopped.**
 At the 10,000 µS/cm ceiling, where all four sensors report the same clamped value,
 the indicator was observed at 13 for 69 frames and at 12 for one. What it is

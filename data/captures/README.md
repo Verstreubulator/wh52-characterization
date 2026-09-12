@@ -87,7 +87,7 @@ measurement 565 to 1,603, temperature 19.3 to 37.5 °C, and conductivity 4.6 to
 **Every carry value the hardware can produce is present.** The four high bits of
 the conductivity count take the values 0, 1, 2 and 3 here. A value of 4 would need
 a count of 262,144, which is 10,240 µS/cm, and the sensor clamps at 10,000. The
-highest count in this set is 256,197. There is no fifth case to capture.
+highest count in this set is 256,198. There is no fifth case to capture.
 
 ## Reading the dry-air captures
 
