@@ -299,6 +299,8 @@ BANNED = [
     ("rank order among the four was stable", "the order changes from window to window"),
     ("4.7 to 5.4 µS/cm, and never lower", "the air-frame range is 4.6 to 5.2"),
     ("report 4.6 to 5.4", "the air-frame range is 4.6 to 5.2"),
+    ("A second bad frame is kept", "that frame is valid; our decoder slipped bits"),
+    ("3,240 mV from an AA cell", "that reading came from a mis-decode, not the sensor"),
     ("Flame-retardant epoxy resin",
      "that is the module's sealing compound; its probe is an alloy electrode"),
 ]

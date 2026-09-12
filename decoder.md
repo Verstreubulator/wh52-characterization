@@ -87,10 +87,13 @@ sum check while decoding to a temperature of 89 °C, a conductivity of 10 µS/cm
 sensor lying in air, and a byte 11 whose low nibble is 12 where every other frame we
 have has 6. The CRC would have rejected it.
 
-A second bad frame is kept in [data/captures/](data/captures/) as a worked
-example. It fails both check bytes, and unlike the first one, nothing in its
-moisture, temperature or conductivity values looks wrong. Only the battery voltage
-gives it away, at 3,240 mV from an AA cell.
+An earlier version of this file offered a second worked example, a capture whose
+frame appeared to fail both check bytes with only its battery voltage looking
+absurd at 3,240 mV. That frame was not corrupt. Our decoder had slipped bits in the
+tail of a weak burst; demodulated independently it passes both check bytes and
+gives 1,620 mV, and it is now in the inventory. The episode is described in
+[errata.md](errata.md), and it is the reason the capture inventory is built from
+two independent demodulators rather than one.
 
 **Do not use byte 11 as a validity check.** It was constant across every frame we
 had at the time, and using it as a filter seemed harmless. It is not: the moment
