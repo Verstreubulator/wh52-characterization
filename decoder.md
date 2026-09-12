@@ -70,8 +70,10 @@ ec_range       = b11 >> 4
 
 The 25.6 divisor was fitted empirically in July against readings from the
 manufacturer's gateway, over a stepped salt-water series of eleven points from 340
-to 7,430 µS/cm. That span covers range indicators 1 through 8, so the divisor is not
-a soil-only result. An earlier version of this file said otherwise; it was wrong.
+to 7,430 µS/cm. Byte 11 was not recorded then, so which indicator values that span
+covered is not known; what it does establish is that the divisor was not fitted in
+the lowest range alone. An earlier version of this file said it was checked only at
+range 1, which was wrong.
 Ranges above 8 remain unchecked.
 
 Byte 8 carries two unrelated fields at once. Its high nibble belongs to the raw
