@@ -155,4 +155,6 @@ buffer, **identify and fetch in one operation** — see [errata.md](errata.md).
 This is a workaround. The correct solution is for the raw moisture value and the
 range indicator to be emitted by the production decoder, so that nobody needs a
 flex decoder to read them. That change belongs in `fineoffset_wh52.c` upstream and
-is the next thing we intend to do. Once it lands, this section becomes historical.
+is now **submitted**, 2026-09-22, as [rtl_433#3710](https://github.com/merbanan/rtl_433/pull/3710)
+(the decoder) with paired tests [rtl_433_tests#527](https://github.com/merbanan/rtl_433_tests/pull/527).
+Once they merge, this section becomes historical.
