@@ -135,7 +135,8 @@ conductivity field, and wrote the fix himself as pull request 3668. They have sa
 868 MHz European variant of the sensor (rtl_433 pull request 3636, comment), which
 makes them the only person we know of who could check any of this on different
 hardware. Everything here comes from four 915 MHz units of a single batch in one
-garden.
+garden. vgabor99 has since done exactly that for byte 15, showing on two 868 MHz
+units that it does not change with battery voltage (see the errata).
 
 **Benjamin Larsson (merbanan)** and the rtl_433 contributors wrote and maintain
 the software that makes any of this possible. **Christian Zuckschwerdt** reviewed

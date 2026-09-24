@@ -17,6 +17,13 @@ voltages. We later confirmed it on our own hardware by comparing the same units
 six weeks apart: byte 15 had not moved on any unit, while byte 20 had fallen on
 every one.
 
+That comparison could not rule out one remaining idea, that byte 15 records the
+voltage at the moment a battery is inserted, because none of our units had a
+battery change. vgabor99 settled it on September 21, 2026: seven batteries from
+1.28 to 1.62 volts, swapped into two 868 MHz units, left byte 15 unchanged on
+both, while byte 20 rose at every step (`merbanan/rtl_433_tests` pull request 519,
+comment). Byte 15 does not record voltage in any form.
+
 The lesson is that a correlation across four samples of nearly identical value is
 not evidence. We should have looked for variation within a single unit over time
 before claiming anything.

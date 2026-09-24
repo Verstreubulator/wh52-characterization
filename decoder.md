@@ -42,12 +42,13 @@ decoder correctly ignores these frames.
 | 10 | Conductivity, bits 7 to 0 | Known |
 | 11 | High nibble: conductivity range indicator. Low nibble: always 6 | Behavior known, rule not |
 | 12, 13 | Constant per unit, differs between units | **Unknown** |
-| 14 | `0x93` on all eight of our units | **Unknown**, but not per-unit |
-| 15 to 17 | Constant per unit, differs between units | **Unknown** |
+| 14 | `0x93` on all eight of our units, and on both of vgabor99's 868 MHz units | **Unknown**, but not per-unit, and the same on both bands |
+| 15 | Constant per unit, differs between units. Does not change with battery voltage (vgabor99: seven batteries, 1.28 to 1.62 V, two 868 MHz units) | **Unknown**, not voltage |
+| 16, 17 | Constant per unit, differs between units | **Unknown** |
 | 18 | `0x7b` on seven units, `0x8c` on one | **Unknown**, appears per-unit |
 | 19 | Constant per unit, differs between units | **Unknown** |
 | 20 | Battery voltage | Known (vgabor99) |
-| 21 | `0x08` on units with identifiers beginning `0x005`, `0x09` on those beginning `0x007` | Probably a batch or revision marker |
+| 21 | `0x08` on units with identifiers beginning `0x005`, `0x09` on those beginning `0x007`. vgabor99's two 868 MHz units, `0x007713` and `0x00846a`, both read `0x09` | Probably a batch or revision marker |
 | 22 | CRC-8, polynomial `0x31`, initial value `0x00`, over bytes 0 to 21 | Known |
 | 23 | Sum of bytes 0 to 22, modulo 256 | Known |
 
