@@ -97,8 +97,8 @@ expectations for the rename above.
 It was not merged, and for about two weeks the WH52 regression failed: the decoder
 emitted the new field names while the tests still expected the old ones. The
 expectations were corrected on September 10, 2026 in commit `046e7e2` by Christian
-Zuckschwerdt, which fixed the suite without merging the pull request. vgabor99
-closed it on September 21, 2026, and in the same thread reported the byte 15
+Zuckschwerdt, which fixed the suite without merging the pull request. It was
+closed on September 21, 2026, and in the same thread vgabor99 reported the byte 15
 battery test described in the errata.
 
 pbkhrv. *rtl_433 Home Assistant add-ons*.
