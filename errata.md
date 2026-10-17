@@ -85,8 +85,9 @@ abstract and could not confirm it, so that attribution has been removed too. The
 withdrawal stands on its own: we measured in water and spoke about soil.
 
 We do not know which direction applies in soil, and should not have said we did.
-What survives is that the effect was too small to measure anywhere near the
-conductivity our own soil reaches.
+What survived, for a while, was that the effect was too small to measure anywhere
+near the conductivity our own soil reaches. That has since gone too; see the entry
+on the low-conductivity effect below.
 
 ## A threshold pattern was proposed and then abandoned
 
@@ -323,6 +324,39 @@ checkable.
 **Two smaller ones.** The divisor was said to have been checked only at range 1,
 when the July series spanned 340 to 7,430 µS/cm; and a second sensor was credited
 with a reading that belongs to the first.
+
+## Byte 14 was called the same on both bands, and byte 21 was tied to the identifier
+
+We described byte 14 as `0x93` on every unit, "not per-unit, and the same on both
+bands", and byte 21 as `0x08` on identifiers beginning `0x005` and `0x09` on those
+beginning `0x007`. Both rested on our eight units and vgabor99's first two 868 MHz
+units.
+
+vgabor99's two newer units read `0x13` in byte 14 and `0x0F` in byte 21. One of
+them, `0x0077b2`, has an identifier between two units that read `0x09`, so the
+identifier does not predict byte 21 at all. The split we described was a
+coincidence of which units we happened to have.
+
+This is the byte 11 mistake again in a milder form. We did not filter on these
+bytes, but we published a value that was constant across our sample as a property
+of the sensor.
+
+## The low-conductivity effect on moisture was reported as absent
+
+We wrote that below about 300 µS/cm conductivity had no detectable effect on the
+moisture reading, and relied on it to argue that a correction was not needed in our
+soil. It rested on one unsaturated sensor and two readings, 1609 at 4.8 µS/cm and
+1623 at 309.
+
+That was too little data to show anything either way. vgabor99's 868 MHz series
+has about a hundred readings per unit in that span, and in water the raw moisture
+value falls by 0.16 to 0.18 counts per µS/cm on all three older units, about twice
+as steeply as above 400. Our own data said nothing about it, and we had read that
+silence as an answer.
+
+What survives is narrower. Measured in water, the effect across our soil's range
+is about 2 to 3 percentage points, smaller than the error from how firmly a sensor
+is pushed in. Its size and direction in soil are still unknown.
 
 ## Capture files were lost between listing them and fetching them
 

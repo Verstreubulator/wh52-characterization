@@ -107,6 +107,13 @@ scheme exists to remove. **Unless the air reading is taken in a fixed arrangemen
 clear of surfaces and of other sensors, and returned to that arrangement every
 time, the anchor is not accurate enough to be worth having.**
 
+vgabor99's older 868 MHz units are consistent with that, without proving it.
+Lying dry in their cardboard rig, and hours later held by hand clear of
+everything, they read the same air value to within a few counts. So their probes
+repeated across a change of arrangement, where ours did not. That fits the
+instrument being stable and our arrangement being the cause, but two arrangements
+on three units is not much, and we do not know how different theirs were.
+
 The water anchor is probably safer, since a submerged sensor is surrounded by water
 rather than by its surroundings, but we have not tested that either.
 
@@ -155,6 +162,30 @@ are uneven when expressed as reported conductivity, and we do not have enough
 readings either side of each boundary to say whether they are regular once
 temperature is accounted for.
 
+## Conductivity is probably measured with about 10 µS/cm resolution
+
+vgabor99's range-1 readings fill every step of a grid spaced about 10 µS/cm apart,
+the smallest gaps in their higher ranges are the same size, and our own readings sit
+on the same grid. Within a step the reading wanders by less than 1 µS/cm.
+
+**We read this as an internal resolution of about 10 µS/cm, the same in ranges 1
+to 10**, with the small wander on top probably being the temperature correction
+applied to a coarser reading. It is an inference: nothing here shows what the
+firmware does. In practice, the 5 to 137 µS/cm that our soil read during the
+sweep spans only about fourteen distinguishable levels.
+
+## Bytes 14 and 21 probably mark a revision
+
+On vgabor99's two newer units byte 14 is `0x13` where eleven other units read
+`0x93`, and byte 21 is `0x0F` where every other unit reads `0x08` or `0x09`. The same
+two units are the ones whose raw moisture value is the percentage re-encoded, and
+the only ones reading exactly 192 in air. Their identifiers sit between those of
+older units, so the identifier does not predict any of it.
+
+**A firmware or hardware revision fits all four differences at once.** It rests on
+two units from one owner, and we have no other way to identify a revision, so it
+is a working label rather than a finding.
+
 ## The range indicator is not derived from the reported conductivity
 
 At the 10,000 µS/cm ceiling all four sensors report the same clamped value. Over
@@ -169,8 +200,14 @@ transmitted figure has been capped.
 We put less weight on this than we once did. The single range-12 frame is the last
 submerged reading of the day, arriving after all 69 range-13 frames, so the
 indicator fell rather than rose; and it comes from the logger that kept no payload,
-so its check bytes cannot be verified. One unverifiable frame is what the argument
-rests on.
+so its check bytes cannot be verified. On our data, one unverifiable frame is what
+the argument rests on.
+
+vgabor99's data no longer leaves it there. Three of their units moved up a range
+while their readings stayed at the ceiling, 11 to 12 once and 12 to 13 twice, each
+time with the reported value slightly lower afterwards, and every one of those
+frames passes both check bytes. The indicator moved while the value did not, or
+moved the other way.
 
 Taken with the temperature result above, the picture is of a raw internal
 conductance measurement that drives the range switching, and a separately
@@ -212,8 +249,12 @@ and the solution was not uniform. See [behavior.md](behavior.md).
 
 ## A conductivity correction for moisture is not warranted in our soil
 
-Our measurements found no detectable effect below about 300 µS/cm, and the soil in
-our sweep read between 5 and 137.
+Our own measurements found no detectable effect below about 300 µS/cm, and the soil
+in our sweep read between 5 and 137. That was a shortage of readings, not an
+absence of effect. vgabor99's 868 MHz series has many readings there, and in water
+it shows the raw moisture value falling by 0.16 to 0.18 counts per µS/cm from the
+first doses, which would be about 2 to 3 percentage points across our soil's 5 to
+137 if all of it is the salt. See [behavior.md](behavior.md).
 
 We would not go further than that. Our measurements were made in water, and water
 and soil are not equivalent here: a submerged sensor is already at the top of its
@@ -224,9 +265,10 @@ to read the full text of the paper we cite and will not put a direction in its
 mouth. **We do not know which direction applies in our beds**, and we withdrew an
 earlier claim that we did. See [errata.md](errata.md).
 
-What survives is the magnitude. Whatever the sign, we could not measure it where
-our soil operates, and it is smaller than the error introduced by how firmly the
-sensor is pushed into the ground.
+What survives is the magnitude. Measured in water, the effect over our soil's
+range is about 2 to 3 points, which is smaller than the error introduced by
+how firmly the sensor is pushed into the ground. In soil the size and sign may
+both differ, and nobody has measured them on this sensor.
 
 If a correction is ever wanted, the approach in the literature is to treat the
 measured conductivity as an indicator of dielectric loss and correct water content
@@ -235,12 +277,21 @@ electrical conductivity from the imaginary part of the complex permittivity
 "without disregarding the dielectric losses"). Whatever is fitted should be fitted
 in soil rather than in water.
 
-## An observation we cannot explain
+## An observation we can describe but not explain
 
 At the conductivity ceiling, reported moisture rose again. Sensors reading 74 to
 81 percent at 5,300 µS/cm read 92 to 98 percent at 10,002 µS/cm, all still fully
 submerged.
 
 The relationship between conductivity and reported moisture therefore appears to
-be non-monotonic. We do not know whether this is a real effect or a consequence of
-the conductivity measurement being clamped, and we have not investigated further.
+be non-monotonic. We could not tell whether this was a real effect or a consequence
+of the conductivity measurement being clamped, because we had only one reading
+between 5,400 µS/cm and the ceiling.
+
+vgabor99's data points to an answer to that half of the question. On their three
+older units the raw moisture value is lowest at 4,000 to 5,500 µS/cm and climbs
+steadily through 5,500 to 7,000 and 7,000 to 9,990 before reaching the ceiling.
+**The rise begins well below the clamp, which indicates the clamp is not the
+cause.** It rests on three units with their blades partly out of the water, and
+conductivity rose with time there too, so it is an indication rather than proof.
+What does cause it, we still do not know.

@@ -3,7 +3,9 @@
 The raw measurements behind every number in this repository. All of it comes from
 Ecowitt WH52 sensors operating at 915 MHz in Coeur d'Alene, Idaho, recorded on
 September 9 and 10, 2026, except `reference-frames-202607.csv`, which is from
-July.
+July, and the folder [vgabor99-868-20261011/](vgabor99-868-20261011/). That folder
+holds vgabor99's measurements of five 868 MHz units, unchanged and included with
+their permission, and has its own description.
 
 Five sensors appear. Four are identified by the position they occupy in a back
 lawn, where they had been installed since July and from which they had been

@@ -40,21 +40,23 @@ decoder correctly ignores these frames.
 | 8 | High nibble: raw moisture, high bits. Low nibble: conductivity, bits 16 to 19 | Known |
 | 9 | Conductivity, bits 15 to 8 | Known |
 | 10 | Conductivity, bits 7 to 0 | Known |
-| 11 | High nibble: conductivity range indicator. Low nibble: always 6 | Behavior known, rule not |
-| 12, 13 | Constant per unit, differs between units | **Unknown** |
-| 14 | `0x93` on all eight of our units, and on both of vgabor99's 868 MHz units | **Unknown**, but not per-unit, and the same on both bands |
+| 11 | High nibble: conductivity range indicator, 1 to 13 seen. Low nibble: always 6, on both bands | Behavior known, rule not |
+| 12, 13 | Constant per unit, and differs between most units. vgabor99's two newer 868 MHz units share `0x6c 0xc0` | **Unknown**, possibly batch-level rather than per-unit |
+| 14 | `0x93` on all eight of our units and on vgabor99's three older 868 MHz units, `0x13` on their two newer ones. Only bit 7 differs | **Unknown**, not per-unit; looks batch- or revision-level |
 | 15 | Constant per unit, differs between units. Does not change with battery voltage (vgabor99: seven batteries, 1.28 to 1.62 V, two 868 MHz units) | **Unknown**, not voltage |
 | 16, 17 | Constant per unit, differs between units | **Unknown** |
-| 18 | `0x7b` on seven units, `0x8c` on one | **Unknown**, appears per-unit |
+| 18 | `0x7b` on seven of our units and one of vgabor99's, `0x8c` on one of ours and three of theirs, `0x7c` on one of theirs | **Unknown**; varies between units but takes only three values across thirteen |
 | 19 | Constant per unit, differs between units | **Unknown** |
 | 20 | Battery voltage | Known (vgabor99) |
-| 21 | `0x08` on units with identifiers beginning `0x005`, `0x09` on those beginning `0x007`. vgabor99's two 868 MHz units, `0x007713` and `0x00846a`, both read `0x09` | Probably a batch or revision marker |
+| 21 | `0x08` on our units with identifiers beginning `0x005`, `0x09` on ours beginning `0x007` and on vgabor99's three older units, `0x0F` on their two newer ones. The identifier does not predict it: `0x0077b2` lies between two `0x09` units and reads `0x0F` | Probably a batch or revision marker |
 | 22 | CRC-8, polynomial `0x31`, initial value `0x00`, over bytes 0 to 21 | Known |
 | 23 | Sum of bytes 0 to 22, modulo 256 | Known |
 
 Roughly a third of the frame remains undecoded. Bytes 12 through 19 are constant
-for a given sensor and differ between sensors, which suggests factory calibration
-data or a serial number, but we have not been able to demonstrate what they mean.
+for a given sensor and mostly differ between sensors, which suggests factory
+calibration data or a serial number, but we have not been able to demonstrate what
+they mean. Bytes 14 and 21, and on two units bytes 12 and 13, look more like a batch
+or revision than an individual unit.
 They are listed here in the hope that someone else can.
 
 ## Conversions
@@ -76,6 +78,17 @@ covered is not known; what it does establish is that the divisor was not fitted 
 the lowest range alone. An earlier version of this file said it was checked only at
 range 1, which was wrong.
 Ranges above 8 remain unchecked.
+
+**The raw moisture value is not a separate measurement on every unit.** On
+vgabor99's two newer units, the ones with byte 21 at `0x0F`, every transmission
+satisfies `moisture_raw = 192 + round(14.52 × moisture_pct)`. They only reported
+0 percent and 95 to 100 percent, so that is shown at those values only, but there
+the field adds nothing to the percentage. On our four back lawn units and
+vgabor99's three older ones it is a real measurement. Check a unit before relying
+on it.
+
+Reported conductivity moves in steps of about 10 µS/cm, on both bands, so a
+change smaller than that is not resolved. See [behavior.md](behavior.md).
 
 Byte 8 carries two unrelated fields at once. Its high nibble belongs to the raw
 moisture value and its low nibble to the conductivity value. This looks like an
@@ -112,7 +125,10 @@ rtl_433 -f 915M -X 'n=wh52raw,m=FSK_PCM,s=58,l=58,r=5000,preamble=aa2dd4'
 ```
 
 This runs alongside the normal decoders and does not interfere with them. It
-matches WH51 frames as well, which are shorter and can be ignored.
+matches WH51 frames as well, which are shorter and can be ignored. On the 868 MHz
+variant the same specification works at `-f 868.35M`; vgabor99 recorded every file
+in [data/vgabor99-868-20261011/](data/vgabor99-868-20261011/) that way, and the
+layout above held on all five of their units.
 
 The parser in [tools/wh52_parse.py](tools/wh52_parse.py) turns the resulting hex
 payload into the fields above. It reads from standard input or from an MQTT topic.
@@ -158,4 +174,6 @@ range indicator to be emitted by the production decoder, so that nobody needs a
 flex decoder to read them. That change belongs in `fineoffset_wh52.c` upstream and
 is now **submitted**, 2026-09-22, as [rtl_433#3710](https://github.com/merbanan/rtl_433/pull/3710)
 (the decoder) with paired tests [rtl_433_tests#527](https://github.com/merbanan/rtl_433_tests/pull/527).
-Once they merge, this section becomes historical.
+On October 17, 2026 a second commit corrected its byte comments after vgabor99's
+868 MHz data, including the raw moisture caveat above; the decoder's output did not
+change. Both are still open. Once they merge, this section becomes historical.

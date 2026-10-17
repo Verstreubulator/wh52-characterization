@@ -101,6 +101,19 @@ Zuckschwerdt, which fixed the suite without merging the pull request. It was
 closed on September 21, 2026, and in the same thread vgabor99 reported the byte 15
 battery test described in the errata.
 
+vgabor99. Comment on `merbanan/rtl_433_tests` pull request 519, October 11, 2026,
+18:11 UTC, with a postscript at 18:20 UTC.
+https://github.com/merbanan/rtl_433_tests/pull/519#issuecomment-6112095570
+Five 868 MHz units through a distilled-water salt series and an open-air check,
+with the three data files kept in
+[data/vgabor99-868-20261011/](data/vgabor99-868-20261011/). Permission to include
+them was given in the same thread on October 17, 2026.
+
+Braunlich, A. *Change [Fineoffset-WH52] Add moisture_raw and ec_range fields*.
+`merbanan/rtl_433` pull request 3710, opened September 22, 2026, with tests in `merbanan/rtl_433_tests`
+pull request 527. A second commit on October 17, 2026 corrected its byte comments
+after vgabor99's data. Both are open at the time of writing.
+
 pbkhrv. *rtl_433 Home Assistant add-ons*.
 https://github.com/pbkhrv/rtl_433-hass-addons
 The add-on used for all radio captures in this work.

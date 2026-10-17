@@ -28,5 +28,9 @@ author of this repository. The battery voltage decode at byte 20 and the
 conductivity field naming are the work of vgabor99, contributed as pull request
 3668, and are credited as such in [decoder.md](decoder.md).
 
+The files in [data/vgabor99-868-20261011/](data/vgabor99-868-20261011/) were
+measured and recorded by vgabor99 and are included with their permission. Please
+credit vgabor99 if you use them.
+
 Analysis, capture tooling and much of the reasoning recorded here were carried
 out with Claude (Anthropic).

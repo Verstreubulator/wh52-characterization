@@ -198,7 +198,7 @@ Only the rows we can support from the published data.
 | Where a sensor sits, in the same material | up to 8 points | the table above |
 | Between units, at the same raw value | about 3 points | 33 counts of zero-point spread |
 | Placement of one sensor in air | about 2 points | 17 to 21 counts |
-| Conductivity, below 300 µS/cm | not detectable | conductivity section below |
+| Conductivity, below 300 µS/cm | not detectable in our data; up to about 5 points in water in vgabor99's | conductivity section below, and the 868 MHz section |
 | Temperature | not measurable | slopes disagree in sign |
 
 An earlier version of this table led with a single sensor reading 7 percent and then 14 percent after
@@ -284,7 +284,8 @@ and the claim is withdrawn.
 
 The sensor reports which of several gain ranges its conductivity front end is
 using. Raising conductivity from 5 µS/cm to the ceiling moved this indicator
-through ten distinct values.
+through ten distinct values. vgabor99's units showed thirteen; see the
+868 MHz section below.
 
 The one frame that fails the CRC is excluded from this table; it decodes to range 2 at 10 µS/cm and 89 °C,
 and is described in [data/](data/).
@@ -303,7 +304,8 @@ and is described in [data/](data/).
 | 13 | 10,001 to 10,004 | 69 | all four |
 
 Ranges 9 through 11 were not observed. Conductivity was raised in a single large
-step through that region and we did not return to fill it.
+step through that region and we did not return to fill it. vgabor99's data fills
+that gap.
 
 Range 1 counts 451 transmissions, but 334 of those come from a capture program
 that discarded frames where the indicator was not 1. See [data/](data/) for why
@@ -369,17 +371,202 @@ steps and none of these are exact.
 The conductivities those frames were actually at, in the same order: ne 299, 1007, 1443, 2524; se 279,
 1017, 1402, 2534; sw 278, 997, 1402, 2494; nw 299, 998, 1361, 2574.
 
-Below about 300 µS/cm the effect could not be detected. One sensor, which was the
+In our data, below about 300 µS/cm the effect could not be detected. One sensor, which was the
 only one not saturated at the top of its scale in clean water, read 1609 at 4.8
 µS/cm and 1623 at 309 µS/cm. That is a small movement in the opposite direction
 and is within the noise of the measurement.
 
 The soil in our sweep measured between 5 and 137 µS/cm, which places it entirely
-within the region where we could not detect the effect.
+within the region where we could not detect the effect. That was a lack of data
+rather than a finding. vgabor99's 868 MHz series has many more readings at low
+conductivity, and in water it does show the effect there; see below.
 
 We would not extend these numbers to soil. The measurements were taken in water,
 which is not the situation the claim would be about. This is discussed
 in [interpretation.md](interpretation.md) and in [errata.md](errata.md).
+
+## On a second band: vgabor99's measurements at 868 MHz
+
+**Everything in this section was measured by vgabor99**, on five European 868 MHz
+units on October 11, 2026. The files are in
+[data/vgabor99-868-20261011/](data/vgabor99-868-20261011/), unchanged, with a
+summary of the method; the method in their own words is in their comment linked
+from there. The analysis below is ours, and `tools/verify_claims.py` recomputes
+its figures from their files.
+
+The five sensors sat together in a cardboard rig over a plastic container, 4 cm
+apart, with the blades almost fully submerged once water was added. They were read dry,
+then in distilled water, then through salt steps from about 5 µS/cm to the
+ceiling, and finally each was held in open air, clear of everything. Three are
+older units (`007713`, `007da9`, `00846a`) and two newer (`0077b2`, `0080d9`); in
+vgabor99's words, the older three are most likely a single batch and the newer
+two most likely a different one.
+
+The files hold 1,394 payloads that pass both check bytes, which make 972 distinct
+transmissions. Every one of those payloads decodes, under the byte map in
+[decoder.md](decoder.md), to the same values the production decoder reported for
+it. **The frame layout is the same on 868 MHz.**
+
+Three cautions apply throughout. The blades were not fully submerged, so the water
+readings do not compare with ours. Conductivity rose with time, so time and
+conductivity are hard to separate. And the conductivity figures are the sensors'
+own, as they are in our work.
+
+### The range indicator takes at least thirteen values
+
+| Range indicator | Conductivity observed | Units |
+|---|---|---|
+| 1 | 4.9 to 350.0 µS/cm | all five |
+| 2 | 310.0 to 1,049.8 | all five |
+| 3 | 1,090 to 1,799 | all five |
+| 4 | 1,850 to 2,700 | all five |
+| 5 | 2,670 to 3,546 | all five |
+| 6 | 3,541 to 4,860 | all five |
+| 7 | 4,310 to 5,355 | all five |
+| 8 | 5,473 to 6,609 | all five |
+| 9 | 6,522 to 7,969 | all five |
+| 10 | 7,671 to 9,099 | all five |
+| 11 | 8,760 to 10,010 | all five |
+| 12 | 10,001 to 10,007 | four |
+| 13 | 10,001 to 10,005 | the two newer units |
+
+Ranges 9 to 11, which our own series skipped, appear on every unit, and every
+unit passed through 1 to 11 in order; `007da9` later fell back once from 12 to 11.
+That makes thirteen values seen in all, where we had seen ten.
+
+The first change is where we could not place it. Three units read 309.9 µS/cm in
+range 1 and 310.0 in range 2, the same point on all three. `0077b2` stayed in
+range 1 up to 350.0 and then reported 340.0 in range 2, a lower reading after
+switching up. `007da9` was still in range 1 at 350.0 when the low run ended and in
+range 2 at 400.8 when the high run began, so its switch lies somewhere between.
+On their units, then, the first threshold differs from unit to unit, at nearly
+the same temperature. Three of our four units held range 1 up to about 360, which
+fits that, though where our units switched we cannot tell, and our temperatures
+varied; see [interpretation.md](interpretation.md).
+
+Within the two runs the indicator changed 57 times and moved the same way as the
+reported conductivity 53 times. Three of the four exceptions came at the ceiling,
+where the indicator rose while the reading stayed pinned near 10,000, and the
+fourth is `0077b2`'s 350.0 to 340.0. So the indicator also keeps moving after the
+reading has clamped, as it did on ours. At the ceiling ours fell once; theirs
+rose three times, in frames that pass both check bytes.
+
+Both newer units reached 13, while the older three stopped at 11 or 12. Two units
+cannot tell a batch difference from ordinary differences between units.
+
+### Conductivity is reported in steps of about 10 µS/cm
+
+In range 1 the reported values fall into 35 tight clusters, from the floor at
+about 5 µS/cm up to 350.0, with none missing. Adjacent clusters are 9.75 to 10.45 µS/cm apart, an
+evenly spaced grid fits them at 10.14 µS/cm, and within a cluster the reading
+varies by less than 1 µS/cm. vgabor99 pointed this out in their postscript: the
+low run covered nearly every value the range can report.
+
+Our own data shows the same grid, which we had never noticed. Our range-1
+readings fall on 25 of its steps, 9.90 to 10.45 µS/cm apart, and fit it at 10.12
+µS/cm. So this is not an 868 MHz quirk. In ranges 2 to 10 of vgabor99's data the
+smallest gaps between readings are also 8.9 to 10.1 µS/cm, so the step does not
+grow with the range, at least up to range 10. Near the ceiling, in ranges 11 and
+12, some readings are closer together.
+
+### The newer units report moisture as the percentage, re-encoded
+
+On `0077b2` and `0080d9`, every transmission satisfies
+
+```
+moisture_raw = 192 + round(14.52 × moisture_pct)
+```
+
+202 of 202 and 186 of 186. In air both read exactly 192, nowhere near the 564 to
+597 our units read in air. **On these two units the raw field carries nothing
+beyond the percentage.** The older three behave like ours: they send, on average, two
+to four different raw values for each reported percentage, which is a real
+measurement.
+
+The newer units only ever reported 0 percent or 95 to 100 percent in this test,
+so the formula is shown at those values only. Because their raw value follows the
+percentage, they say nothing about the salt effect below: `0077b2`'s reading
+actually rose as salt was added above about 260 µS/cm, from 95 percent to 100. Their bytes 14 and 21 also differ
+from every other unit's; see [decoder.md](decoder.md).
+
+### The older units match ours
+
+Held in open air, the older units read 581, 605 to 611, and 586 to 587. Ours, never
+wetted, read 564 to 597. Dry in the rig earlier the same day they read 581, 606,
+and 585 to 586: the same within a count or two, apart from one 611 from `007da9`.
+In two different arrangements hours apart, lying in the rig and held by hand,
+their air reading held. Ours moved by up to 21 counts when the sensors were
+carried to another room.
+
+The same straight-line fit we used for our own units, applied to their frames,
+gives each older unit's firmware line.
+
+| Sensor | Points | Counts per 1 percent | Raw at 0 percent | Raw at 100 percent |
+|---|---|---|---|---|
+| `007713` | 46 | 9.41 | 617 | 1558 |
+| `007da9` | 71 | 10.02 | 643 | 1645 |
+| `00846a` | 82 | 10.01 | 623 | 1625 |
+
+The frames are different, though. Ours were 2 to 70 percent below 300 µS/cm;
+every one of theirs lies between 70 and 99 percent, in salt water that had pulled
+the reading down. So these are not moisture levels. They show how the firmware
+turns raw into percent, and the zero point is a long extrapolation. Two of the
+three fall inside our range, 9.86 to 10.37 counts per percent, and `007713` has
+the lowest slope of the seven units fitted, though from a different part of the
+scale. `tools/wh52_868_analysis.py` fits the other way round, raw against percent
+plus a half, and so prints slightly different values for the same conversion.
+
+### In water, salt lowers the raw moisture reading from the first doses
+
+The raw moisture reading first fell without any salt. In distilled water,
+`00846a` fell from 1629 to 1590 over 17 minutes while its conductivity stayed at 5
+to 6 µS/cm. We read that as the probe settling after it was wetted, which is an
+inference. `007713` fell by a similar amount, from 1631 to 1594, but salt reached
+it during that time (its reading rose from 5 to 16), so it is not a clean case.
+
+After that, with conductivity between about 16 and 350 µS/cm, the raw reading fell
+as salt was added.
+
+| Sensor | 16 to 350 µS/cm | 400 to 3,000 µS/cm |
+|---|---|---|
+| `007713` | −0.183 counts per µS/cm | −0.075 |
+| `007da9` | −0.180 | −0.090 |
+| `00846a` | −0.159 | −0.083 |
+
+The effect is about twice as steep at low conductivity as above 400. Divided by
+each unit's counts per percent, it comes to 5 to 6 percentage points between 16
+and 320 µS/cm, if all of it is the salt.
+
+**We think it is mostly the salt, but cannot prove it.** Conductivity rose
+steadily through the run, so time and conductivity are confounded, and some of the
+settling may have continued. On `007713` the reading also drifted down while the
+conductivity held within one step, so part of its fall may be time. On `00846a` it
+did not, which makes that unit the cleanest case. This is also water, on partly submerged blades. It says nothing about the
+direction in soil.
+
+### At high conductivity the depression reverses
+
+Median raw moisture of the older units, fully in the water, by conductivity:
+
+| Sensor | 4,000 to 5,500 µS/cm | 5,500 to 7,000 | 7,000 to 9,990 | at the ceiling |
+|---|---|---|---|---|
+| `007713` | 1324 | 1357 | 1423 | 1481 |
+| `007da9` | 1367 | 1392 | 1473 | 1537 |
+| `00846a` | 1326 | 1357 | 1446 | 1498 |
+
+The reading is lowest at 4,000 to 5,500 µS/cm and climbs steadily from there. The
+climb begins well below the ceiling, so it is not produced by the conductivity
+value clamping. Our own units read higher at the ceiling too; see
+[interpretation.md](interpretation.md).
+
+### Five units in one solution
+
+Taking every moment in the low run when all five units had settled above 150
+µS/cm, 36 in all, the highest reading exceeded the lowest by 11 to 21 percent,
+with a median of 15.5. Our four units differed by 11 percent in our one stirred
+solution, at the low end of their range. One caution: early in the run the cup was not
+well mixed. The units first read 15 µS/cm or more at times from 11:45 to 11:57,
+so some of the spread may be the solution rather than the sensors.
 
 ## Raw signal captures — verifying the conductivity arithmetic
 

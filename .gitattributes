@@ -3,3 +3,5 @@
 *.csv  text eol=lf
 *.py   text eol=lf
 *.cu8  binary
+# vgabor99's JSON files are kept byte for byte; data/vgabor99-868-20261011/SHA256SUMS checks them.
+*.json -text
