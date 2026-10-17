@@ -331,9 +331,11 @@ counting therefore moves while the transmitted value does not.
 Two cautions about that single frame. It is the **last** submerged frame, at
 10:25:20, after every one of the 69 range-13 frames, so the indicator fell rather
 than rose; an earlier version of this document said it rose. And it comes from the
-logger that kept no payload, so its CRC cannot be checked. The conclusion that the
-indicator is not a function of the transmitted value rests on one unverifiable
-frame. Range 8 appears once in our record, at 6,040 µS/cm, which is below the
+logger that kept no payload, so its CRC cannot be checked. On our data alone, the
+conclusion that the indicator is not a function of the transmitted value would rest
+on one unverifiable frame. vgabor99's data does not leave it there: three of their
+units moved up a range at the ceiling, in frames that pass both check bytes. See
+the 868 MHz section below. Range 8 appears once in our record, at 6,040 µS/cm, which is below the
 ceiling and not part of this.
 
 The indicator does not rescale the conductivity value. The counts either side of a

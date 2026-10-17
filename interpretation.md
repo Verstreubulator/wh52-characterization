@@ -147,6 +147,15 @@ rather than selecting 2 percent. And the two readings are an hour apart in
 different solutions, with the sensor lifted out and re-immersed in between, so
 hysteresis in the range switching is an alternative we cannot exclude.
 
+vgabor99's 868 MHz data makes a fair test, because their temperature hardly moved,
+22.4 to 25.3 °C over the whole session. It contains only one inversion of this
+kind: `0077b2` read 350.0 µS/cm in range 1 and, five minutes later, 340.0 in range
+2, both at 22.5 °C. No temperature coefficient can reorder two readings taken at
+the same temperature, so the model does not explain this one. It is a single step
+of the 10 µS/cm grid, so a small offset between ranges, or hysteresis, would
+produce it. The `back_lawn_ne` example above is about eleven steps, so the model
+may still explain ours, but it does not explain every inversion.
+
 The published register map for the commodity module discussed in
 [hardware.md](hardware.md) documents a conductivity temperature coefficient with a
 default of exactly 2 percent per degree Celsius (Seeed Technology, 2020). We
@@ -160,7 +169,10 @@ strong.
 We were not able to determine the rule governing where the thresholds fall. They
 are uneven when expressed as reported conductivity, and we do not have enough
 readings either side of each boundary to say whether they are regular once
-temperature is accounted for.
+temperature is accounted for. vgabor99's data catches almost every boundary from
+1 to 11 between two consecutive transmissions, at nearly constant temperature, and
+the thresholds there are still uneven and differ between units. So temperature is
+not the whole explanation either, and we still have no rule.
 
 ## Conductivity is probably measured with about 10 µS/cm resolution
 
@@ -218,7 +230,8 @@ value stops.
 
 ## The conductivity ceiling is a product limit
 
-All four sensors stop at 10,000 µS/cm, while the data field carries values up to
+All four of our sensors stop at 10,000 µS/cm, and so do all five of vgabor99's,
+the highest of theirs at 10,009.5, while the data field carries values up to
 roughly 41,000.
 
 **This suggests the limit is set by the sensing element or the firmware rather

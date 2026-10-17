@@ -50,7 +50,8 @@ said so in the text.
 ## Summary of findings
 
 The WH52 reports soil moisture, soil temperature and electrical conductivity
-over a 915 MHz radio link, running from a single AA cell. Beyond that, the
+over a 915 MHz radio link, or 868 MHz for the European variant, running from a
+single AA cell. Beyond that, the
 findings that seem most worth recording are these.
 
 **Each probe is individually calibrated, and the differences are substantial.**

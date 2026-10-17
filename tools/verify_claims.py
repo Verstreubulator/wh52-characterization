@@ -653,6 +653,39 @@ pts5 = [abs(lo_s[u]) * (137 - 5) / fits[u] for u in V_OLD]
 check("about 2 to 3 percentage points across 5 to 137 uS/cm",
       all(2 <= x <= 3 for x in pts5), str([round(x, 1) for x in pts5]))
 
+v_temp = lambda r: float(f"{(((r['raw'][4] & 0x1F) << 8) | r['raw'][5]) * 0.1 - 40:.1f}")
+check("their temperature spans only 22.4 to 25.3 C over the session",
+      (min(map(v_temp, vg)), max(map(v_temp, vg))) == (22.4, 25.3))
+inversions = []
+for u in units:
+    for g in range(1, 12):
+        hi = [r for r in vg if r["id"] == u and r["range"] == g]
+        lo = [r for r in vg if r["id"] == u and r["range"] == g + 1 and r["ec"] < 9990]
+        if hi and lo:
+            h, l = max(hi, key=lambda r: r["ec"]), min(lo, key=lambda r: r["ec"])
+            if h["ec"] > l["ec"]:
+                inversions.append((u, g, round(h["ec"], 1), v_temp(h), round(l["ec"], 1), v_temp(l),
+                                   (when(l) - when(h)).total_seconds() / 60))
+check("one same-unit inversion: 0077b2 350.0 in range 1, then 340.0 in range 2, both at 22.5 C",
+      len(inversions) == 1 and inversions[0][:6] == ("0077b2", 1, 350.0, 22.5, 340.0, 22.5)
+      and 4 <= inversions[0][6] <= 6, str(inversions))
+ne_pair = [float(r["ec_uS_cm"]) for r in series if r["probe"].endswith("ne")
+           and (int(r["byte11"], 16) >> 4, r["ec_uS_cm"]) in ((6, "4869.7"), (7, "4760.8"))]
+check("the back_lawn_ne example, 4,869.7 in range 6 and 4,760.8 in range 7, is about eleven steps",
+      sorted(set(ne_pair)) == [4760.8, 4869.7] and round((4869.7 - 4760.8) / 10.14) == 11)
+caught = defaultdict(set)
+for name in V_FILES[1:]:
+    for u in units:
+        fs = sorted((r for r in vg if r["id"] == u and r["file"] == name), key=lambda r: r["time"])
+        for a, b in zip(fs, fs[1:]):
+            if b["range"] == a["range"] + 1 and a["range"] <= 10:
+                caught[a["range"]].add(u)
+check("every boundary 1 to 11 is caught between consecutive transmissions, except 007da9's first",
+      all(len(caught[g]) == 5 for g in range(2, 11)) and caught[1] == set(units) - {"007da9"})
+check("all five of their units stop at about 10,000, the highest at 10,009.5",
+      round(max(r["ec"] for r in vg), 1) == 10009.5
+      and all(max(r["ec"] for r in vg if r["id"] == u) > 10000 for u in units))
+
 print("\nDocument text (phrases that must not reappear)")
 DOCS = {name: open(name, encoding="utf-8").read()
         for name in ("README.md", "behavior.md", "interpretation.md", "decoder.md",
